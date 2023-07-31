@@ -224,13 +224,9 @@ install_tdx_guest_packages() {
         --copy-in ${GUEST_REPO}/amd64/:/srv/guest_repo/ \
         --copy-in ${GUEST_REPO}/all/:/srv/guest_repo/ \
         --copy-in ${GUEST_REPO}/sgx_debian_local_repo/pool/main/libt/libtdx-attest/:/srv/guest_repo/ \
-        --run-command "apt remove --allow-remove-essential shim-signed -y" \
-        --run-command "apt remove grub-pc -y" \
-        --run-command "dpkg -r --force-all grub-efi-amd64-signed" \
         --run-command "cd /srv/guest_repo/all && dpkg -i *.deb || true" \
         --run-command "cd /srv/guest_repo/amd64 && dpkg -i *.deb || true" \
         --run-command "cd /srv/guest_repo/libtdx-attest && dpkg -i *.deb || true" \
-        --run-command 'grub-install --target=x86_64-efi --modules "tpm"'
     ok "Install the TDX guest packages into guest image..."
 }
 

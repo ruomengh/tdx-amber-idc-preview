@@ -10,17 +10,18 @@ TDX_TOOLS_DIR=$(realpath "${CURR_DIR}/../tdx-tools")
 ARTIFACTS_DIR=$(realpath "${CURR_DIR}/../artifacts")
 UBUNTU_ISO_DIR="${ARTIFACTS_DIR}/ubuntu-iso"
 UBUNTU_ISO_FILENAME="jammy-server-cloudimg-amd64.img"
-RELEASE="2023ww29"
+RELEASE="2023ww30"
+REPO_LOCAL="/srv/artifacts"
 PACKAGE_REPO_URL="https://ubit-artifactory-or.intel.com/artifactory/linuxmvpstacks-or-local/idc/assets/${RELEASE}.tar.gz"
 OFFICIAL_UBUNTU_IMAGE="https://cloud-images.ubuntu.com/jammy/current/"
 DCAP_REPO_URL="https://download.01.org/intel-sgx/sgx-dcap/1.16/linux/distro/ubuntu22.04-server/sgx_debian_local_repo.tgz"
 DCAP_REPO_FILENAME="sgx_debian_local_repo.tgz"
 
-TDX_MVP_VERSION_KERNEL="5.19.17-mvp23v3+6"
-TDX_MVP_VERSION_QEMU="7.0.50+mvp9+15"
+TDX_MVP_VERSION_KERNEL="5.19.17-mvp25v4+0"
+TDX_MVP_VERSION_QEMU="7.0.50+mvp11+21"
 TDX_MVP_VERSION_LIBVIRT="8.6.0-2022.11.17.mvp1"
 TDX_MVP_VERSION_OVMF="2023.03.07-stable202302.mvp9"
-TDX_MVP_VERSION_MODULE="1.0.03.03-mvp30"
+#TDX_MVP_VERSION_MODULE="1.0.03.03-mvp30"
 
 info() {
     echo -e "\e[1;33mINFO: $*\e[0;0m"
@@ -99,9 +100,12 @@ download_artifacts() {
     pushd ${ARTIFACTS_DIR}
 
     info "Download TDX MVP Release packages..."
+    if [[ ! -f "${REPO_LOCAL}/${RELEASE}.tar.gz" ]]; then
+	error "${REPO_LOCAL}/${RELEASE}.tar.gz does not exist"
+    fi
     if [[ ! -f "${RELEASE}.tar.gz" ]]; then
-        wget --show-progress -O ${RELEASE}.tar.gz ${PACKAGE_REPO_URL}
-        ok "Download TDX stack repo file..."
+	cp ${REPO_LOCAL}/${RELEASE}.tar.gz .
+        ok "Copy TDX stack repo file..."
         tar zxvf ${RELEASE}.tar.gz
         ok "Extract TDX stack repo file..."
     else
@@ -164,6 +168,6 @@ download_ubuntu_iso_image() {
     popd
 }
 
-pre_check
+#pre_check
 download_artifacts
 download_ubuntu_iso_image

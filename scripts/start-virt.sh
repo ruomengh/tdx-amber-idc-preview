@@ -11,7 +11,7 @@ set -e
 
 CURR_DIR=$(readlink -f "$(dirname "$0")")
 
-GUEST_IMG="tdx-guest-ubuntu22.04.qcow2"
+GUEST_IMG="tdx-guest.qcow2"
 GUEST_NAME="tdx-guest"
 GUEST_ROOTDIR=/tmp/libvirt-vms
 TEMPLATE="${CURR_DIR}/tdx_libvirt_ubuntu_host.template"
@@ -20,7 +20,7 @@ FORCE=false
 usage() {
     cat << EOM
 Usage: $(basename "$0") [OPTION]...
-  -i <guest image file>     Default is tdx-guest-ubuntu22.04.qcow2 under current directory
+  -i <guest image file>     Default is tdx-guest.qcow2 under current directory
   -n <guest name>           Name of TD guest
   -t <template file>        Default is ${TEMPLATE}
   -f                        Force recreate

@@ -47,7 +47,7 @@ SGX_EPC_SIZE=64M
 # Installed from the package of intel-mvp-tdx-tdvf
 OVMF="/usr/share/qemu/OVMF.fd"
 GUEST_IMG=""
-DEFAULT_GUEST_IMG="${CURR_DIR}/td-guest.qcow2"
+DEFAULT_GUEST_IMG="${CURR_DIR}/tdx-guest.qcow2"
 KERNEL=""
 DEFAULT_KERNEL="${CURR_DIR}/vmlinuz"
 VM_TYPE="td"

@@ -9,66 +9,59 @@
 
 ### 1.2 Receive Emails for Intel SDP Login and Intel Amber info
 
+You will received two emails, one is for the information of `Intel SDP Login`, and another is for
+Amber's URL, API Key and the URL of this github repository.
+
+In the first email,
+- You will get the link of "SSH Public Key". Please click it to upload your local SSH public key for next step SSH login.
+You can find your local key at
+
+    - Windows: `c:\users\<your windows user name>\.ssh\id_rsa.pub`
+    - Linux: `~/.ssh/id_rsa.pub`
+
+    ![](/doc/customer-on-board-email.png)
+
+- You will also get the login command as below:
+
+    ```
+    ssh -J guest@146.152.205.59 -L 10022:192.168.13.2:22 sdp@192.168.13.2
+    ```
+
+In the second email,
+
+TBD
 
 ### 1.3 Login Bare Metal
 
-To login the bare metal server, you can use the following steps:
+To access the target server in Intel Dev Cloud, you need use SSH to pass-through a jump server like below picture:
 
-- On Microsoft* Windows* Operating System:
+![](/doc/devcloud-ssh-login.png)
 
-    1. Download and install 'git for windows' from https://gitforwindows.org with default options.
-    2. Launch `cmd.exe`.
-    3. Generate SSH Keys by running `ssh-keygen.exe` with default options.
-    4. Run `notepad.exe %USERPROFILE%\.ssh\id_rsa.pub` and copy the file content to the link SSH Public Key (link is
-        available only in customer email) and wait for authorization email.
-    5. Run `notepad.exe %USERPROFILE%\.ssh\config` and copy/paste the following lines into the notepad
-         (replace `PROXYSERVER:PROXYPORT` with your corporate proxy information, for no proxy remove that line)
-        (for additional tunnels for KVM/BMC, copy the LocalForward line with your required target IP address and port)
+If prefer to use simple command line, please get from on-board email in section 1.2.
+If prefer to use SSH config for a proxy configurations, example is shown in below:
 
-        ```
-        Host sshserver
-            HostName 146.152.206.250
-            User guest
-            ProxyCommand "C:\Program Files\Git\mingw64\bin\connect.exe" -S PROXYSERVER:PROXYPORT %h %p
+![](/doc/devcloud-ssh-login-proxy.png)
 
-        Host sdp
-            HostName 192.168.12.2
-            User sdp
-            ProxyCommand ssh.exe -W %h:%p sshserver
-            LocalForward 10443 192.168.12.3:443
-            LocalForward 10022 192.168.12.2:22
-        ```
-    6. Run `ssh.exe sdp` and follow the instructions
-    7. When prompted for password enter `<your password>`
-    8. If BMC is applicable to this system, browse to https://localhost:10443 for BMC access
-    9. To do file transfer, use SCP to localhost:10022
+```
+Host jumperserver
+    HostName <jumper server address>
+    User guest
+    ProxyCommand ncat --proxy <your proxy host>:<your proxy port> %h %p
 
+Host sdp
+    HostName <target server address>
+    User sdp
+    ProxyJump jumperserver
+    LocalForward 10022 <target server address>:22
+    LocalForward 10443 <target server address>:443
+```
+_NOTE:_ Please provides:
+- `<your proxy host>:<your proxy port>` according to your network
+- `<jumper server address>` from the on-board email
+- `<target server address>` from the on-board email
+- Please config `ProxyCommand` if you are using windows OS
 
-- On Linux* Operating System:
-
-    1. Generate SSH Keys by running `ssh-keygen` with default options.
-    2. Copy the content of `~/.ssh/id_rsa.pub` to the link SSH Public Key (link is available only in customer email) and
-       wait for authorization email.
-    3. Copy/Paste the following lines into the file `~/.ssh/config`
-       (Create the file config if it does not exists already)
-       (replace `PROXYSERVER:PROXYPORT` with your corporate proxy information, for no proxy remove that line)
-       (for additional tunnels for KVM/BMC, copy the LocalForward line with you required target IP address and port)
-        ```
-        Host sshserver
-            HostName 146.152.206.250
-            User guest
-            ProxyCommand /usr/bin/nc -x PROXYSERVER:PROXYPORT %h %p
-        Host sdp
-            HostName 192.168.12.2
-            User sdp
-            ProxyCommand ssh -W %h:%p sshserver
-            LocalForward 10443 192.168.12.3:443
-            LocalForward 10022 192.168.12.2:22
-        ```
-    4. Run ssh sdp and follow the instructions
-    5. When prompted for password enter `<your password>`
-    6. If BMC is applicable to this system, browse to https://localhost:10443 for BMC access
-    7. To do file transfer, use SCP to localhost:10022
+_NOTE: Please get more details from [Intel SDP SSH Config](/doc/intel_sdp_ssh_login.md)._
 
 
 For the first time, please clone the github project and run initialization scripts:
@@ -80,6 +73,7 @@ cd ./scripts
 ```
 
 _NOTE: Please get `<Github URL for On-Board Repo>` from the email after submitting request form in above 1.2._
+
 
 ### 1.4 Create TDVM
 

@@ -226,7 +226,7 @@ install_tdx_guest_packages() {
         --copy-in ${GUEST_REPO}/sgx_debian_local_repo/pool/main/libt/libtdx-attest/:/srv/guest_repo/ \
         --run-command "cd /srv/guest_repo/all && dpkg -i *.deb || true" \
         --run-command "cd /srv/guest_repo/amd64 && dpkg -i *.deb || true" \
-        --run-command "cd /srv/guest_repo/libtdx-attest && dpkg -i *.deb || true" \
+        --run-command "cd /srv/guest_repo/libtdx-attest && dpkg -i *.deb || true"
     ok "Install the TDX guest packages into guest image..."
 }
 
@@ -260,6 +260,7 @@ if (( $EUID != 0 )); then
     sleep 5
 fi
 
+set -ex
 create_guest_image
 config_guest_env
 resize_guest_image

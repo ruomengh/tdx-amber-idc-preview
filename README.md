@@ -58,9 +58,9 @@ You will also receive another email with subject "Intel® Trust Domain Extension
 Once logged into the TDX-enabled system, clone the GitHub project and execute the initialization scripts.
 
 ```
-tdx@tdx-guest:~$git clone https://github.com/IntelConfidentialComputing/tdx-amber-idc-preview
-tdx@tdx-guest:~$cd tdx-amber-idc-preview/scripts
-tdx@tdx-guest:~$./init.sh
+git clone https://github.com/IntelConfidentialComputing/tdx-amber-idc-preview
+cd tdx-amber-idc-preview/scripts
+./init.sh
 ```
 
 
@@ -69,21 +69,21 @@ tdx@tdx-guest:~$./init.sh
 
 - Create a TD guest image from official Ubuntu 22.04 image as follows:
 ```
-tdx@tdx-guest:~$./create-guest-image.sh -o <image file name> -u <username> -p <password> -n <guest vm name>
+./create-guest-image.sh -o <image file name> -u <username> -p <password> -n <guest vm name>
 ```
 Example
 ```
-tdx@tdx-guest:~$./create-guest-image.sh -o tdx-guest.qcow2 -u tdx -p 123TdVMTest -n my-guest
+./create-guest-image.sh -o tdx-guest.qcow2 -u tdx -p 123TdVMTest -n my-guest
 ```
 
 - Start TDVM via libvirt
 After creating the guest image, use the following command to create a TDVM
 ```
-tdx@tdx-guest:~$./start-virt.sh -i <image file name> -n <guest vm name>
+/start-virt.sh -i <image file name> -n <guest vm name>
 ```
 Example
 ```
-tdx@tdx-guest:~$./start-virt.sh -i tdx-guest.qcow2 -n my-guest
+./start-virt.sh -i tdx-guest.qcow2 -n my-guest
 ```
 
 - You can manage the TDVM using vrish toll with the commands below (optional)
@@ -91,24 +91,24 @@ tdx@tdx-guest:~$./start-virt.sh -i tdx-guest.qcow2 -n my-guest
 # Examples of commands to manage VMs
 
 # list all VMs created by current Linux account 
-tdx@tdx-guest:~$virsh list --all
+virsh list --all
 
 # Suspend a VM
-tdx@tdx-guest:~$virsh suspend my-guest
+virsh suspend my-guest
 
 # Resume a VM
-tdx@tdx-guest:~$virsh resume my-guest
+virsh resume my-guest
 
 # Shutdown a VM
-tdx@tdx-guest:~$ virsh shutdown my-guest
+virsh shutdown my-guest
 
 # To start a VM
-tdx@tdx-guest:~$ virsh start my-guest
+virsh start my-guest
 
 # To connect to the VM Console
-tdx@tdx-guest:~$ virsh console my-guest
+virsh console my-guest
 ```
-_NOTE: To exit a running VM pls use ^] (Ctrl + ]) 
+_NOTE: To exit a running VM please use ^] (Ctrl + ]) 
 _NOTE: please change `my-guest` to your guest's name._
 
 _NOTE: Please check chapter 3.2 at the [Whitepaper: Linux* Stacks for Intel® Trust Domain Extension 1.0 v0.10](https://www.intel.com/content/www/us/en/content-details/783067/whitepaper-linux-stacks-for-intel-trust-domain-extension-1-0.html)_
@@ -125,7 +125,7 @@ tdx@tdx-guest:~$ tdx_tdreport
 For more details on TD report please refer to section 4.2 in the [Whitepaper: Linux* Stacks for Intel® Trust Domain Extension 1.0 v0.10](https://www.intel.com/content/www/us/en/content-details/783067/whitepaper-linux-stacks-for-intel-trust-domain-extension-1-0.html)_
 
 
-### 1.9 Use Amber client to generate quote
+### 1.8 Use Amber client to generate quote
 
 
 ```
@@ -134,7 +134,7 @@ tdx@tdx-guest:~$ sudo amber-cli quote
 ```
 
 
-### 1.10 Attestation
+### 1.9 Attestation
 Execute the follwing commands to perform the attestation.
 ```
 tdx@tdx-guest:~$ export AMBER_URL=<AMBER URL String>

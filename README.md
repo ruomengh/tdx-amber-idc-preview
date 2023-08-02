@@ -152,7 +152,7 @@ For more details on TD report please refer to section 4.2 in the [Whitepaper: Li
 
 ```
 tdx@tdx-guest:~$ sudo amber-cli quote
-...
+
 ```
 
 

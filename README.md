@@ -5,110 +5,109 @@
 
 
 ### 1.1 Fill out Request Form
+Click on the link below and submit a request to reserve an Intel® TDX-enabled system.
 <https://www.intel.com/content/www/us/en/forms/developer/tdx/request-instance-one-cloud.html>
 
-### 1.2 Receive Email for Intel Login
+### 1.2 Remote access 
 
-You will receive an email, with the information of `Intel SDP Login`, 
+If the request is approved you will receive an email with subject "DevCloud - Instructions for remote access".
+This email will have all the details on how to access the TDX-enabled system remotely.
 
-In the first email,
-- You will get the link of "SSH Public Key". Please click it to upload your local SSH public key for next step SSH login.
-You can find your local key at
+- Click on the "SSH Public Key" link and copy the content of your SSH public key into the box and submit.
+Typically the SSH keys are located the following location
 
     - Windows: `c:\users\<your windows user name>\.ssh\id_rsa.pub`
     - Linux: `~/.ssh/id_rsa.pub`
 
     ![](/doc/customer-on-board-email.png)
 
-- You will also get the login command as below:
+### 1.3 Login to TDX-enabled dedicated instance
 
-    ```
-    ssh -J guest@146.152.205.59 -L 10022:192.168.13.2:22 sdp@192.168.13.2
-    ```
-
-### 1.3 Receive Email for Intel Amber info
-Email is for Amber's URL, API Key, and the URL of this github repository.
-
-
-### 1.4 Login to TDX enabled dedicated instance
-
-To access the target server in Intel Dev Cloud, you need use SSH to pass-through a jump server like below picture:
+The following diagram shows how Intel DevCloud is set up to enable you to establish an SSH connection to your TDX-enabled system through a jump server.
 
 ![](/doc/devcloud-ssh-login.png)
 
-If prefer to use simple command line, please get from on-board email in section 1.2.
-If prefer to use SSH config for a proxy configurations, example is shown in below:
-
+#### No Proxy:
+If you are NOT behind corporate Proxy, copy/paste the command proviede in the email to connect to your particualr TDX-enabled system.
+Use the command proviede in the email to connect to your particualr TDX-enabled system. Example command is shown below.
+```
+ssh -J guest@146.152.205.59 -L 10022:192.168.14.2:22 sdp@192.168.14.2
+```
+_NOTE_: the default password is $harktank2Go
 ![](/doc/devcloud-ssh-login-proxy.png)
 
+#### Behind Proxy:
+If you are behind corporate Proxy, add the following lines into .ssh/config with your corporate PROXYSERVER and PROXYPORT, then run the above command.
+#For Linux Operating System:
 ```
-Host jumperserver
-    HostName <jumper server address>
-    User guest
-    ProxyCommand ncat --proxy <your proxy host>:<your proxy port> %h %p
-
-Host sdp
-    HostName <target server address>
-    User sdp
-    ProxyJump jumperserver
-    LocalForward 10022 <target server address>:22
-    LocalForward 10443 <target server address>:443
+Host 146.152.*.*
+ProxyCommand /usr/bin/nc -x PROXYSERVER:PROXYPORT %h %p
 ```
-_NOTE:_ Please provides:
-- `<your proxy host>:<your proxy port>` according to your network
-- `<jumper server address>` from the on-board email
-- `<target server address>` from the on-board email
-- Please config `ProxyCommand` if you are using windows OS
+#For Non-Linux Operating System: (Install gitforwindows.org)
+```
+Host 146.152.*.*
+ProxyCommand "C:\Program Files\Git\mingw64\bin\connect.exe" -S PROXYSERVER:PROXYPORT %h %p
+```
+_NOTE: For more details on how to configure ssh please refer the email or [Intel SDP SSH Config](/doc/intel_sdp_ssh_login.md)._
 
-_NOTE: Please get more details from [Intel SDP SSH Config](/doc/intel_sdp_ssh_login.md)._
+### 1.4 Intel Project Amber info
+You will also receive another email with subject "Intel® Trust Domain Extensions and Project Amber in Intel’s® DevCloud"   
+that will have the Amber API key and Amber URL that you will need for attestation. 
 
+### 1.5 Initial setup
 
-For the first time, please clone the github project and run initialization scripts:
+Once logged into the TDX-enabled system, clone the GitHub project and execute the initialization scripts.
 
 ```
-git clone https://github.com/IntelConfidentialComputing/tdx-amber-idc-preview
-cd ./scripts
-./init.sh
+tdx@tdx-guest:~$git clone https://github.com/IntelConfidentialComputing/tdx-amber-idc-preview
+tdx@tdx-guest:~$cd ./scripts
+tdx@tdx-guest:~$./init.sh
 ```
 
 
-### 1.5 Create TDVM
-
-- Create a TD guest image from official Ubuntu 22.04 image as follows:
-
+### 1.6 Create TDVM
 ![](/doc/customer_create_guest_image.png)
 
+- Create a TD guest image from official Ubuntu 22.04 image as follows:
 ```
-./create-guest-image.sh -o [image name] -p [password]
-
+tdx@tdx-guest:~$./create-guest-image.sh -o <image name> -p <password>
+``` 
 Example:
-./create-guest-image.sh -o _tdx-guest.qcow2_ -p 123TdVMTest
+```
+tdx@tdx-guest:~$./create-guest-image.sh -o _tdx-guest.qcow2_ -p 123TdVMTest
 ```
 
 If want to customize the guest vm name, user name: (optional)
 ```
-./create-guest-image.sh -o tdx-guest.qcow2 -u tdx -p 123TdVMTest -n my-guest
+tdx@tdx-guest:~$./create-guest-image.sh -o <image file name> -u <username> -p <password> -n <guest vm name>
 ```
-
+Example
+```
+tdx@tdx-guest:~$./create-guest-image.sh -o tdx-guest.qcow2 -u tdx -p 123TdVMTest -n my-guest
+```
 
 - Create TDVM via libvirt
-
+After creating the gues image use the following command to create a TDVM
 ```
-./start-virt.sh -i tdx-guest.qcow2 -n my-guest
+tdx@tdx-guest:~$./start-virt.sh -i <image file name> -n <guest vm name>
+```
+Example
+```
+tdx@tdx-guest:~$./start-virt.sh -i tdx-guest.qcow2 -n my-guest
 ```
 
-- After creation, please use virsh to manage the TDVM
-
+- After creation, you can use virsh toll to manage the TDVM (optional)
 ```
-# Examples of commands to manage VMs (optional)
+# Examples of commands to manage VMs
+
 # list all VMs created by current Linux account 
-virsh list --all
+tdx@tdx-guest:~$virsh list --all
 
 # Suspend a VM
-virsh suspend my-guest
+tdx@tdx-guest:~$virsh suspend my-guest
 
 # Resume a VM
-virsh resume my-guest
+tdx@tdx-guest:~$virsh resume my-guest
 
 # Shutdown a VM
 tdx@tdx-guest:~$ virsh shutdown my-guest
@@ -120,10 +119,13 @@ _NOTE: please change `my-guest` to your guest's name._
 _NOTE: Please check chapter 3.2 at the [Whitepaper: Linux* Stacks for Intel® Trust Domain Extension 1.0 v0.10](https://www.intel.com/content/www/us/en/content-details/783067/whitepaper-linux-stacks-for-intel-trust-domain-extension-1-0.html)_
 
 
-### 1.6 Login TD guest
-
+### 1.7 Login TD guest
 1. Login in via SSH command line
 
+```
+tdx@tdx-guest:~$ virsh console <guest vm name>
+```
+Example
 ```
 tdx@tdx-guest:~$ virsh console my-guest
 ```
@@ -134,19 +136,19 @@ tdx@tdx-guest:~$ virsh console my-guest
 
 _NOTE: You can only manage the VMs created by your Linux account._
 
-### 1.7 Check TEE environment
+### 1.8 Check TEE environment
 
-1. Check TD Report
+1. Check TD Report  
 TODO: explain what is tdx report is (one line)
 
-To read about td report please refer to section 4.2 in the following [Whitepaper: Linux* Stacks for Intel® Trust Domain Extension 1.0 v0.10](https://www.intel.com/content/www/us/en/content-details/783067/whitepaper-linux-stacks-for-intel-trust-domain-extension-1-0.html)_
 ```
 to generate the td report run the following command
 tdx@tdx-guest:~$ tdx_tdreport
 ```
+To read about td report please refer to section 4.2 in the following [Whitepaper: Linux* Stacks for Intel® Trust Domain Extension 1.0 v0.10](https://www.intel.com/content/www/us/en/content-details/783067/whitepaper-linux-stacks-for-intel-trust-domain-extension-1-0.html)_
 
 
-### 1.8 Use Amber client to generate Quote
+### 1.9 Use Amber client to generate Quote
 
 
 ```
@@ -156,23 +158,23 @@ tdx@tdx-guest:~$ sudo amber-cli quote
 ```
 
 
-### 1.9 User Amber client + API key for Attestation
-
+### 1.10 Attestation
+Execute the follwing commands to perform the attestation.
 ```
 tdx@tdx-guest:~$ export AMBER_URL=<AMBER URL String>
 tdx@tdx-guest:~$ export AMBER_API_KEY=<AMBER API Key>
 tdx@tdx-guest:~$ amber-cli create-key-pair -k key.pem
-tdx@tdx-guest:~$ amber-cli token
+tdx@tdx-guest:~$ sudo -E amber-cli token
 ```
+_Note: Make cure there are no white space before or after the API key_
 
 ## 2. Run workload without attestation in TDVM
-
 There is no any different to run workload in TDVM with the non-confidential VM, like:
-
 ```
 tdx@tdx-guest:~$ docker run nginx
 ```
-TODO: how to verify nginx is working
+TODO: use a curl command to demonstrate that the nignx server is up and running?
+
 ## 3. Further Reading
 
 - [Intel TDX Whitepaper](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-trust-domain-extensions.html)

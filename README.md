@@ -28,8 +28,8 @@ The following diagram shows how Intel DevCloud is set up to enable you to establ
 ![](/doc/devcloud-ssh-login.png)
 
 #### No Proxy:
-If you are NOT behind corporate Proxy, copy/paste the command proviede in the email to connect to your particualr TDX-enabled system.
-Use the command proviede in the email to connect to your particualr TDX-enabled system. Example command is shown below.
+If you are NOT behind corporate proxy, copy and paste the command provided in the email to connect to your assigned TDX-enabled system.
+Pls use the command provided in the email to connect to your assigned TDX-enabled system. Example command is shown below.
 ```
 ssh -J guest@146.152.205.59 -L 10022:192.168.14.2:22 sdp@192.168.14.2
 ```
@@ -51,8 +51,7 @@ ProxyCommand "C:\Program Files\Git\mingw64\bin\connect.exe" -S PROXYSERVER:PROXY
 _NOTE: For more details on how to configure ssh please refer the email or [Intel SDP SSH Config](/doc/intel_sdp_ssh_login.md)._
 
 ### 1.4 Intel Project Amber info
-You will also receive another email with subject "Intel® Trust Domain Extensions and Project Amber in Intel’s® DevCloud"   
-that will have the Amber API key and Amber URL that you will need for attestation. 
+You will also receive another email with subject "Intel® Trust Domain Extensions and Project Amber in Intel® DevCloud". The email will contain the Amber API key and Amber URL that you will need for attestation. 
 
 ### 1.5 Initial setup
 
@@ -87,7 +86,7 @@ tdx@tdx-guest:~$./create-guest-image.sh -o tdx-guest.qcow2 -u tdx -p 123TdVMTest
 ```
 
 - Create TDVM via libvirt
-After creating the gues image use the following command to create a TDVM
+After creating the guest image, use the following command to create a TDVM
 ```
 tdx@tdx-guest:~$./start-virt.sh -i <image file name> -n <guest vm name>
 ```
@@ -96,7 +95,7 @@ Example
 tdx@tdx-guest:~$./start-virt.sh -i tdx-guest.qcow2 -n my-guest
 ```
 
-- After creation, you can use virsh toll to manage the TDVM (optional)
+- You can manage the TDVM using vrish toll with the commands below (optional)
 ```
 # Examples of commands to manage VMs
 
@@ -145,10 +144,10 @@ TODO: explain what is tdx report is (one line)
 to generate the td report run the following command
 tdx@tdx-guest:~$ tdx_tdreport
 ```
-To read about td report please refer to section 4.2 in the following [Whitepaper: Linux* Stacks for Intel® Trust Domain Extension 1.0 v0.10](https://www.intel.com/content/www/us/en/content-details/783067/whitepaper-linux-stacks-for-intel-trust-domain-extension-1-0.html)_
+For more details on TD report please refer to section 4.2 in the [Whitepaper: Linux* Stacks for Intel® Trust Domain Extension 1.0 v0.10](https://www.intel.com/content/www/us/en/content-details/783067/whitepaper-linux-stacks-for-intel-trust-domain-extension-1-0.html)_
 
 
-### 1.9 Use Amber client to generate Quote
+### 1.9 Use Amber client to generate quote
 
 
 ```
@@ -169,7 +168,7 @@ tdx@tdx-guest:~$ sudo -E amber-cli token
 _Note: Make cure there are no white space before or after the API key_
 
 ## 2. Run workload without attestation in TDVM
-There is no any different to run workload in TDVM with the non-confidential VM, like:
+Running workloads in a TDVM is exactly the same as your would run the workload in a non-confidential VM. For example
 ```
 tdx@tdx-guest:~$ docker run nginx
 ```

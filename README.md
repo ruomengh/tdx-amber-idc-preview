@@ -29,7 +29,7 @@ The following diagram shows how Intel DevCloud is set up to enable you to establ
 
 #### No Proxy:
 If you are NOT behind corporate proxy, copy and paste the command provided in the email to connect to your assigned TDX-enabled system.
-Pls use the command provided in the email to connect to your assigned TDX-enabled system. Example command is shown below.
+See below an example command below.
 ```
 ssh -J guest@146.152.205.59 -L 10022:192.168.14.2:22 sdp@192.168.14.2
 ```

@@ -113,13 +113,6 @@ _NOTE: please change `my-guest` to your guest's name._
 
 _NOTE: Please check chapter 3.2 at the [Whitepaper: Linux* Stacks for Intel® Trust Domain Extension 1.0 v0.10](https://www.intel.com/content/www/us/en/content-details/783067/whitepaper-linux-stacks-for-intel-trust-domain-extension-1-0.html)_
 
-
-2. Use virt-manager GUI application running on your laptop to manage all VMs from remote server.
-
-![](/doc/customer_manage_tdvm.png)
-
-_NOTE: You can only manage the VMs created by your Linux account._
-
 ### 1.8 Check Trusted Execution Environment (TEE) environment
 
 1. Check TD Report  

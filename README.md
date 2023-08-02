@@ -105,24 +105,15 @@ tdx@tdx-guest:~$ virsh shutdown my-guest
 # To start a VM
 tdx@tdx-guest:~$ virsh start my-guest
 
+# To connect to the VM Console
+tdx@tdx-guest:~$ virsh console my-guest
 ```
-
+_NOTE: To exit a running VM pls use ^] (Ctrl + ]) 
 _NOTE: please change `my-guest` to your guest's name._
 
 _NOTE: Please check chapter 3.2 at the [Whitepaper: Linux* Stacks for Intel® Trust Domain Extension 1.0 v0.10](https://www.intel.com/content/www/us/en/content-details/783067/whitepaper-linux-stacks-for-intel-trust-domain-extension-1-0.html)_
 
 
-### 1.7 Login TD guest
-1. Login in via SSH command line
-
-```
-tdx@tdx-guest:~$ virsh console <guest vm name>
-```
-Example
-```
-tdx@tdx-guest:~$ virsh console my-guest
-```
- 
 2. Use virt-manager GUI application running on your laptop to manage all VMs from remote server.
 
 ![](/doc/customer_manage_tdvm.png)

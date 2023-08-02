@@ -59,7 +59,7 @@ Once logged into the TDX-enabled system, clone the GitHub project and execute th
 
 ```
 tdx@tdx-guest:~$git clone https://github.com/IntelConfidentialComputing/tdx-amber-idc-preview
-tdx@tdx-guest:~$cd ./scripts
+tdx@tdx-guest:~$cd tdx-amber-idc-preview/scripts
 tdx@tdx-guest:~$./init.sh
 ```
 
@@ -69,15 +69,6 @@ tdx@tdx-guest:~$./init.sh
 
 - Create a TD guest image from official Ubuntu 22.04 image as follows:
 ```
-tdx@tdx-guest:~$./create-guest-image.sh -o <image name> -p <password>
-``` 
-Example:
-```
-tdx@tdx-guest:~$./create-guest-image.sh -o _tdx-guest.qcow2_ -p 123TdVMTest
-```
-
-If want to customize the guest vm name, user name: (optional)
-```
 tdx@tdx-guest:~$./create-guest-image.sh -o <image file name> -u <username> -p <password> -n <guest vm name>
 ```
 Example
@@ -85,7 +76,7 @@ Example
 tdx@tdx-guest:~$./create-guest-image.sh -o tdx-guest.qcow2 -u tdx -p 123TdVMTest -n my-guest
 ```
 
-- Create TDVM via libvirt
+- Start TDVM via libvirt
 After creating the guest image, use the following command to create a TDVM
 ```
 tdx@tdx-guest:~$./start-virt.sh -i <image file name> -n <guest vm name>
@@ -111,6 +102,9 @@ tdx@tdx-guest:~$virsh resume my-guest
 # Shutdown a VM
 tdx@tdx-guest:~$ virsh shutdown my-guest
 
+# To start a VM
+tdx@tdx-guest:~$ virsh start my-guest
+
 ```
 
 _NOTE: please change `my-guest` to your guest's name._
@@ -135,7 +129,7 @@ tdx@tdx-guest:~$ virsh console my-guest
 
 _NOTE: You can only manage the VMs created by your Linux account._
 
-### 1.8 Check TEE environment
+### 1.8 Check Trusted Execution Environment (TEE) environment
 
 1. Check TD Report  
 TODO: explain what is tdx report is (one line)

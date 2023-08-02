@@ -113,7 +113,7 @@ _NOTE: please change `my-guest` to your guest's name._
 
 _NOTE: Please check chapter 3.2 at the [Whitepaper: Linux* Stacks for Intel® Trust Domain Extension 1.0 v0.10](https://www.intel.com/content/www/us/en/content-details/783067/whitepaper-linux-stacks-for-intel-trust-domain-extension-1-0.html)_
 
-### 1.8 Check Trusted Execution Environment (TEE) environment
+### 1.7 Check Trusted Execution Environment (TEE) environment
 
 1. Check TD Report  
 TODO: explain what is tdx report is (one line)

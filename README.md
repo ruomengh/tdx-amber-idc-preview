@@ -88,7 +88,8 @@ Example
 
 - You can manage the TDVM using vrish toll with the commands below (optional)
 ```
-# Examples of commands to manage VMs
+# Examples of commands to manage VMs (should be run on the host)
+#To escape out of TVDM use ^] (i.e. hit Ctrl+] keys)
 
 # list all VMs created by current Linux account 
 virsh list --all

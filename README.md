@@ -35,7 +35,7 @@ See below an example command below.
 ```
 ssh -J guest@146.152.205.59 -L 10022:192.168.14.2:22 sdp@192.168.14.2
 ```
-_NOTE_: the default password is $harktank2Go
+_NOTE_: the password is provided in the email
 ![](/doc/devcloud-ssh-login-proxy.png)
 
 #### Behind Proxy:

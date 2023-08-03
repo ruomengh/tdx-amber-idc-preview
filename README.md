@@ -145,11 +145,12 @@ tdx@tdx-guest:~$ sudo -E amber-cli token
 _Note: Make cure there are no white space before or after the API key_
 
 ## 2. Run workload without attestation in TDVM
-Running workloads in a TDVM is exactly the same as your would run the workload in a non-confidential VM. For example
+Running workloads in a TDVM is exactly the same as you would run the workload in a non-confidential VM.  
+For example, run the nginx web server in a container
 ```
-tdx@tdx-guest:~$ docker run nginx
+tdx@tdx-guest:~$sudo docker run -it --rm -d -p 8080:80 --name web nginx
+tdx@tdx-guest:~$curl http://localhost:8080
 ```
-TODO: use a curl command to demonstrate that the nignx server is up and running?
 
 ## 3. Further Reading
 

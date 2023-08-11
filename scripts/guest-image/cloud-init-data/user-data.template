@@ -35,6 +35,7 @@ packages:
 
 runcmd:
   - apt install --fix-broken
+  - sed -i 's/^PasswordAuthentication .*/PasswordAuthentication yes/' /etc/ssh/sshd_config
   #- sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="[^"]*/& ima_hash=sha384 ima_policy=critical_data/' /etc/default/grub.d/50-cloudimg-settings.cfg
   - update-grub2
 

@@ -12,7 +12,6 @@ UBUNTU_ISO_DIR="${ARTIFACTS_DIR}/ubuntu-iso"
 UBUNTU_ISO_FILENAME="jammy-server-cloudimg-amd64.img"
 RELEASE="2023ww30"
 REPO_LOCAL="/srv/artifacts"
-PACKAGE_REPO_URL="https://ubit-artifactory-or.intel.com/artifactory/linuxmvpstacks-or-local/idc/assets/${RELEASE}.tar.gz"
 OFFICIAL_UBUNTU_IMAGE="https://cloud-images.ubuntu.com/jammy/current/"
 DCAP_REPO_URL="https://download.01.org/intel-sgx/sgx-dcap/1.17/linux/distro/ubuntu22.04-server/sgx_debian_local_repo.tgz"
 DCAP_REPO_FILENAME="sgx_debian_local_repo.tgz"
@@ -96,6 +95,11 @@ pre_check() {
 }
 
 download_artifacts() {
+    if [[ ${1} == "-r" ]]; then
+        info "Reinitialize the environment..."
+        rm ${ARTIFACTS_DIR} -fr
+        mkdir -o ${ARTIFACTS_DIR}
+    fi
 
     if [[ ! -d ${ARTIFACTS_DIR} ]]; then
         mkdir -p ${ARTIFACTS_DIR}

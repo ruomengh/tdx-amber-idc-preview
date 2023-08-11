@@ -20,7 +20,6 @@ TDX_MVP_VERSION_KERNEL="5.19.17-mvp25v4+0"
 TDX_MVP_VERSION_QEMU="7.0.50+mvp11+21"
 TDX_MVP_VERSION_LIBVIRT="8.6.0-2022.11.17.mvp1"
 TDX_MVP_VERSION_OVMF="2023.03.07-stable202302.mvp9"
-#TDX_MVP_VERSION_MODULE="1.0.03.03-mvp30"
 
 info() {
     echo -e "\e[1;33mINFO: $*\e[0;0m"
@@ -41,6 +40,46 @@ warn() {
 
 check_tool() {
     [[ "$(command -v $1)" ]] || { error "$1 is not installed" 1>&2 ; }
+}
+
+usage() {
+    cat << EOM
+Usage: $(basename "$0") [OPTION]...
+  -f                        Force re-initialize the environment
+  -h                        Show this help
+EOM
+}
+
+pre-check() {
+    # Check whether current user belong to libvirt
+    if [[ ! $(id -nG "$USER") == *"libvirt"* ]]; then
+    echo WARNING! Please add user "$USER" into group "libvirt" via \"sudo usermod -aG libvirt "$USER"\"
+    return 1
+    fi
+}
+
+process_args() {
+    while getopts ":fh" option; do
+        case "$option" in
+            f) FORCE=true;;
+            h) usage
+               exit 0
+               ;;
+            *)
+               echo "Invalid option '-$OPTARG'"
+               usage
+               exit 1
+               ;;
+        esac
+    done
+
+
+    if [[ ${FORCE} == "true" ]]; then
+        info "Reinitialize the environment..."
+        rm ${ARTIFACTS_DIR} -fr
+    fi
+
+    mkdir -p ${ARTIFACTS_DIR}
 }
 
 pre_check() {
@@ -179,5 +218,6 @@ if [[ ${1} == "-r" ]]; then
 fi
 
 #pre_check
+process_args "$@"
 download_artifacts
 download_ubuntu_iso_image

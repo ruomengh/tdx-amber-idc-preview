@@ -14,7 +14,7 @@ RELEASE="2023ww30"
 REPO_LOCAL="/srv/artifacts"
 PACKAGE_REPO_URL="https://ubit-artifactory-or.intel.com/artifactory/linuxmvpstacks-or-local/idc/assets/${RELEASE}.tar.gz"
 OFFICIAL_UBUNTU_IMAGE="https://cloud-images.ubuntu.com/jammy/current/"
-DCAP_REPO_URL="https://download.01.org/intel-sgx/sgx-dcap/1.16/linux/distro/ubuntu22.04-server/sgx_debian_local_repo.tgz"
+DCAP_REPO_URL="https://download.01.org/intel-sgx/sgx-dcap/1.17/linux/distro/ubuntu22.04-server/sgx_debian_local_repo.tgz"
 DCAP_REPO_FILENAME="sgx_debian_local_repo.tgz"
 
 TDX_MVP_VERSION_KERNEL="5.19.17-mvp25v4+0"
@@ -96,6 +96,10 @@ pre_check() {
 }
 
 download_artifacts() {
+
+    if [[ ! -d ${ARTIFACTS_DIR} ]]; then
+        mkdir -p ${ARTIFACTS_DIR}
+    fi
 
     pushd ${ARTIFACTS_DIR}
 

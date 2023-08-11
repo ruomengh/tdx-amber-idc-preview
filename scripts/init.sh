@@ -95,11 +95,7 @@ pre_check() {
 }
 
 download_artifacts() {
-    if [[ ${1} == "-r" ]]; then
-        info "Reinitialize the environment..."
-        rm ${ARTIFACTS_DIR} -fr
-        mkdir -o ${ARTIFACTS_DIR}
-    fi
+
 
     if [[ ! -d ${ARTIFACTS_DIR} ]]; then
         mkdir -p ${ARTIFACTS_DIR}
@@ -175,6 +171,12 @@ download_ubuntu_iso_image() {
     done
     popd
 }
+
+if [[ ${1} == "-r" ]]; then
+    info "Reinitialize the environment..."
+    rm ${ARTIFACTS_DIR} -fr
+    mkdir -p ${ARTIFACTS_DIR}
+fi
 
 #pre_check
 download_artifacts

@@ -2,3 +2,4 @@ artifacts/
 *.qcow2
 *.log
 scripts/guest-image/cloud-init-data/user-data
+scripts/guest-image/cloud-init-data/meta-data

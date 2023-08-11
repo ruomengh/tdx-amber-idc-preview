@@ -32,9 +32,6 @@
       <source file='/path/to/image'/>
       <target dev='vda' bus='virtio'/>
     </disk>
-    <interface type="user">
-      <model type="virtio"/>
-    </interface>
     <interface type='bridge'>
       <source bridge='virbr0'/>
       <model type='virtio'/>

@@ -211,12 +211,6 @@ download_ubuntu_iso_image() {
     popd
 }
 
-if [[ ${1} == "-r" ]]; then
-    info "Reinitialize the environment..."
-    rm ${ARTIFACTS_DIR} -fr
-    mkdir -p ${ARTIFACTS_DIR}
-fi
-
 #pre_check
 process_args "$@"
 download_artifacts

@@ -13,7 +13,7 @@ CURR_DIR=$(readlink -f "$(dirname "$0")")
 
 GUEST_IMG="tdx-guest.qcow2"
 GUEST_NAME="tdx-guest"
-GUEST_ROOTDIR=/tmp/libvirt-vms
+GUEST_ROOTDIR=/tmp/$USER/libvirt-vms
 TEMPLATE="${CURR_DIR}/tdx_libvirt_ubuntu_host.template"
 FORCE=false
 

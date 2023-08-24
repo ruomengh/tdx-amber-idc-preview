@@ -206,7 +206,7 @@ EOT
         --virt-type kvm \
         --graphics none \
         --import \
-        --wait=3
+        --wait=5
     ok "Complete cloud-init..."
     sleep 1
 

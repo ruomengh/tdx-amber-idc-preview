@@ -119,6 +119,7 @@ sudo ${GUEST_IMAGE_TOOL_DIR}/create-ubuntu-image.sh \
     -p ${GUEST_PASSWORD} \
     -r "${ARTIFACTS_DIR}/${RELEASE}/mvp-tdx-stack-guest-ubuntu-22.04/jammy/" \
     -o ${GUEST_IMG} \
+    -s ${SIZE} \
     -f
 
 cp /tmp/${GUEST_IMG} ${CURR_DIR}/

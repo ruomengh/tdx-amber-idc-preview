@@ -18,6 +18,7 @@ GUEST_IMG="tdx-guest.qcow2"
 GUEST_HOSTNAME="tdx-guest"
 GUEST_USER="tdx"
 GUEST_PASSWORD=""
+SIZE=20
 
 info() {
     echo -e "\e[1;33mINFO: $*\e[0;0m"

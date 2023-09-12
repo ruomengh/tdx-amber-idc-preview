@@ -78,6 +78,8 @@ Example
 ./create-guest-image.sh -o tdx-guest.qcow2 -u tdx -p 123TdVMTest -n my-guest
 ```
 
+_NOTE: Please make sure the output file with extension of `.qcow2`._
+
 - Start TDVM via libvirt
 After creating the guest image, use the following command to create a TDVM
 ```
@@ -88,7 +90,7 @@ Example
 ./start-virt.sh -i tdx-guest.qcow2 -n my-guest
 ```
 
-- You can manage the TDVM using vrish toll with the commands below (optional)
+- You can manage the TDVM using `virsh` tool with the commands below (optional)
 ```
 # Examples of commands to manage VMs (should be run on the host)
 #To escape out of TVDM use ^] (i.e. hit Ctrl+] keys)

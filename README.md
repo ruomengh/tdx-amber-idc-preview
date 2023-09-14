@@ -1,12 +1,95 @@
 # Intel Developer Cloud (IDC) TDX Amber Preview
 
 ## 1. Customer On-Board Workflow
-![](/doc/overall_customer_on_board.png)
+
+### 1.1 Registration
+
+1.1 Signup with your corporate email address at [Intel® Developer Zone](https://www.intel.com/content/www/us/en/forms/developer/standard-registration.html?tgt=https://www.intel.com/content/www/us/en/secure/developer/devcloud/cloud-launchpad.html), if not already done.
+1.2. Signin at [Intel® Developer Zone](https://www.intel.com/content/www/us/en/my-intel/developer-sign-in.html?redirect=https://scheduler.cloud.intel.com).
+1.3. Launch and access instance from [Intel® Developer Cloud Management Console](https://scheduler.cloud.intel.com/).
 
 
-### 1.1 Fill out Request Form
-Click on the link below and submit a request to reserve an Intel® TDX-enabled system.
-<https://www.intel.com/content/www/us/en/forms/developer/tdx/request-instance-one-cloud.html>
+### 1.2 Setup - SSH Keys
+
+Setting up SSH Keys is an one time task.
+
+**WARNING**: Never share your private keys with anyone. Never create a SSH Private key without a passphrase.
+
+1. Launch a Terminal/Command Prompt on your local system.
+2. Copy & Paste the following to your terminal/command prompt to generate SSH Keys.
+
+   - Linux*/macOS*:
+   ```
+   ssh-keygen -t ed25519 -f ~/.ssh/id_rsa
+   ```
+   - Windows*:
+   ```
+   mkdir %USERPROFILE%\.ssh
+   ssh-keygen -t ed25519 -f %USERPROFILE%\.ssh\id_rsa
+   ```
+
+3. If you are prompted to overwrite, select no.
+4. Copy & Paste the following to your terminal/command prompt to open your public key.
+
+   - Linux*/macOS*:
+   ```
+   vi ~/.ssh/id_rsa.pub
+   ```
+   - Windows*:
+   ```
+   notepad %USERPROFILE%\.ssh\id_rsa.pub
+   ```
+
+    _Note: The public key must be in your profile before starting an instance. The instance will need to be relaunched if the public key was updated after a virtual machine is launched._
+
+5. Copy the entire content of the file id_rsa.pub
+6. Click Profile Icon from the top blue navigation bar and click Profile. You must login to [Intel® Developer Cloud Management Console](https://scheduler.cloud.intel.com/) to see Profile Icon.
+![](./doc/bar.png)
+
+7. Paste the copied content in the text box **SSH RSA 4096 Public Key** and Click **Save Key**
+
+    **Note**: If your key is not in default path/name, you must add IdentityFile parameter in SSH config file.
+
+    **WARNING**: If you are connecting to Intel Developer Cloud from your company Corporate Network, you will need to follow the section [Access from Corporate Network](#13-access-from-corporate-network).
+
+### 1.3 Access from Corporate Network
+**WARNING**: If you are connecting to Intel Developer Cloud from your company Corporate Network, you will need to update SSH config file.
+
+**Note**: If you connect using Command Prompt on Microsoft* Windows* Operating System, you must install [gitforwindows](https://gitforwindows.org/).
+
+1. Setting up SSH Configuration is an one time task.
+2. Your SSH configuration file is located in a folder named .ssh under your user's home folder. If the file is not present, create one.
+3. Copy & Paste the following to SSH config file (~/.ssh/config).
+
+   - Linux*/macOS*:
+   ```
+   Host 146.152.*.* idcbetabatch.eglb.intel.com
+   ProxyCommand /usr/bin/nc -x PROXYSERVER:PROXYSPORT %h %p
+   ```
+   - Windows*:
+   ```
+   Host 146.152.*.* idcbetabatch.eglb.intel.com
+   ProxyCommand "C:\Program Files\Git\mingw64\bin\connect.exe" -S PROXYSERVER:PROXYSPORT %h %p 
+   ```
+
+4. From your Lab Administrator, get PROXYSERVER and PROXYPORT in your Corporate Network for SSH, NOT for HTTP/HTTPS Proxy.
+
+5. Replace PROXYSERVER and PROXYPORT with the information you received from your lab administrator and save the SSH Config file.
+
+### 1.4 Request Access to TDX Bare Metal Instance
+
+1. All Bare Metal Instances are available upon request only. Follow the instructions below to request a Bare Metal Instance.
+2. Click Instances from top blue navigation bar
+3. Click on check box of chosen instance "Beta - Intel® Trust Domain Extensions (Intel® TDX) with 4th Generation Intel® Xeon® Scalable processors"
+4. Click Launch Instance
+![](./doc/devcloud_launch_tdx_baremetal_instance.png)
+5. Review the details and Click 'Request Instance'
+![](./doc/devcloud_request_instance.png)
+
+
+
+
+
 
 ### 1.2 Remote access
 

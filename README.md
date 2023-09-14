@@ -4,10 +4,9 @@
 
 ### 1.1 Registration
 
-1.1 Signup with your corporate email address at [Intel® Developer Zone](https://www.intel.com/content/www/us/en/forms/developer/standard-registration.html?tgt=https://www.intel.com/content/www/us/en/secure/developer/devcloud/cloud-launchpad.html), if not already done.
-1.2. Signin at [Intel® Developer Zone](https://www.intel.com/content/www/us/en/my-intel/developer-sign-in.html?redirect=https://scheduler.cloud.intel.com).
-1.3. Launch and access instance from [Intel® Developer Cloud Management Console](https://scheduler.cloud.intel.com/).
-
+1. Signup with your corporate email address at [Intel® Developer Zone](https://www.intel.com/content/www/us/en/forms/developer/standard-registration.html?tgt=https://www.intel.com/content/www/us/en/secure/developer/devcloud/cloud-launchpad.html), if not already done.
+2. Signin at [Intel® Developer Zone](https://www.intel.com/content/www/us/en/my-intel/developer-sign-in.html?redirect=https://scheduler.cloud.intel.com).
+3. Launch and access instance from [Intel® Developer Cloud Management Console](https://scheduler.cloud.intel.com/).
 
 ### 1.2 Setup - SSH Keys
 
@@ -101,7 +100,7 @@ Setting up SSH Keys is an one time task.
 8. Bare Metal Instance provisioning might take few minutes.
 9. If you would like to terminate instance at any time, click the red colored icon in screen shot above.
 
-**Note**: Only your current public key will be authorized to acces this instance.
+**Note**: Only your current public key will be authorized to access this instance.
 **Note**: If you have multiple keys to be authorized to access your reserved instances, or you have changed your public key in profile, you need add those keys in each reserved instance separately.
 
 ### 1.6 Access a Bare Metal Instance
@@ -111,7 +110,7 @@ Setting up SSH Keys is an one time task.
 
 ![](./doc/devcloud_copy_ssh_command.png)
 
-**Note**: If the SSH command errored out for the option '-J', your ssh client version might be too old. Modify the SSH Command as per the format below and run.
+    **Note**: If the SSH command errored out for the option '-J', your ssh client version might be too old. Modify the SSH Command as per the format below and run.
 
 ```
 ssh -o ProxyCommand="ssh -W %h:%p guest@JUMP_HOST_IP " USERNAME@TARGET_IP

@@ -110,11 +110,12 @@ Setting up SSH Keys is an one time task.
 
 ![](./doc/devcloud_copy_ssh_command.png)
 
-    **Note**: If the SSH command errored out for the option '-J', your ssh client version might be too old. Modify the SSH Command as per the format below and run.
+**Note**: If the SSH command errored out for the option '-J', your ssh client version might be too old. Modify the SSH Command as per the format below and run.
 
 ```
 ssh -o ProxyCommand="ssh -W %h:%p guest@JUMP_HOST_IP " USERNAME@TARGET_IP
 ```
+
 3. Because you have copy pasted the command from Intel Developer Cloud portal, type 'yes' to continue, if prompted.
 4. User will be shown a password and prompted to enter the password. Enter the shown password.
 5. After entering the password, user will be logged into the launched Bare Metal Instance.
@@ -124,12 +125,16 @@ ssh -o ProxyCommand="ssh -W %h:%p guest@JUMP_HOST_IP " USERNAME@TARGET_IP
 9. Type scp -P 10022 devcloud@localhost:[PATH_TO_DESTINATION] .
 10. If you have multiple keys to be authorized to access your reserved instances, you can add those additional keys by following the next step without relaunching instance.
 11. In View Instances, on a launched instance, Click on Click here to add additional SSH Keys, to add your additional SSH keys.
+
 ![](./doc/devcloud_additional_ssh_key.png)
+
 12. If you have changed your public key in profile after you launched an instance, you can add your new key by following the next step without relaunching instance.
 13. In View Instances, on a launched instance, Click on Click here to add additional SSH Keys, to add your additional SSH keys.
+
 ![](./doc/devcloud_additional_ssh_key.png)
 
 ### 1.7 Help/Support Resources
+
 ![](./doc/devcloud_support.png)
 
 

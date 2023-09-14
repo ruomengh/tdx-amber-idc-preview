@@ -1,6 +1,6 @@
 # Intel Developer Cloud (IDC) TDX Amber Preview
 
-## 1. Customer On-Board Workflow
+## 1. Customer On-Board DevCloud
 
 ### 1.1 Registration
 
@@ -85,60 +85,55 @@ Setting up SSH Keys is an one time task.
 ![](./doc/devcloud_launch_tdx_baremetal_instance.png)
 5. Review the details and Click 'Request Instance'
 ![](./doc/devcloud_request_instance.png)
+6. Enter your company name in full and provide purpose of this instance request in few lines.
+![](./doc/devcloud_input_company_info.png)
+7. If your request is approved, Intel Developer Cloud Customer Response Team will respond within 2-3 business days.
 
+### 1.5 Launch a Bare Metal Instance
+1. To launch a Bare Metal Instance, follow the instructions below.
+2. Click Instances from top blue navigation bar
+3. Click on check box of requried instance
+4. Click Launch Instance
+5. Read the Intel(R) Developer Cloud Access Agreement and Click check box agree, if you agree
+6. Click Launch Instance
+![](./doc/devcloud_launch_instance.png)
+7. If user is allowed to launch this instance, instance will be launched and user will be redirected to View Instances.
+8. Bare Metal Instance provisioning might take few minutes.
+9. If you would like to terminate instance at any time, click the red colored icon in screen shot above.
 
+**Note**: Only your current public key will be authorized to acces this instance.
+**Note**: If you have multiple keys to be authorized to access your reserved instances, or you have changed your public key in profile, you need add those keys in each reserved instance separately.
 
+### 1.6 Access a Bare Metal Instance
 
+1. WARNING: All Bare Metal Instances get auto terminated after 7 days from launch time.
+2. To access a launched Bare Metal Instance, from 'View Instances', Click on 'Click here to copy the SSH command' and paste in your terminal or command prompt.
+Note: If the SSH command errored out for the option '-J', your ssh client version might be too old. Modify the SSH Command as per the format below and run.
 
-
-### 1.2 Remote access
-
-If the request is approved you will receive an email with subject "DevCloud - Instructions for remote access".
-This email will have all the details on how to access the TDX-enabled system remotely.
-
-- Click on the "SSH Public Key" link and copy the content of your SSH public key into the box and submit.
-Typically the SSH keys are located the following location
-
-    - Windows: `c:\users\<your windows user name>\.ssh\id_rsa.pub`
-    - Linux: `~/.ssh/id_rsa.pub`
-
-    ![](/doc/customer-on-board-email.png)
-
-    ![](/doc/ssh_pub_key_upload_form.png)
-
-### 1.3 Login to TDX-enabled dedicated instance
-
-The following diagram shows how Intel DevCloud is set up to enable you to establish an SSH connection to your TDX-enabled system through a jump server.
-
-![](/doc/devcloud-ssh-login.png)
-
-#### No Proxy:
-If you are NOT behind corporate proxy, copy and paste the command provided in the email to connect to your assigned TDX-enabled system.
-See below an example command below.
 ```
-ssh -J guest@146.152.205.59 -L 10022:192.168.14.2:22 sdp@192.168.14.2
+ssh -o ProxyCommand="ssh -W %h:%p guest@JUMP_HOST_IP " USERNAME@TARGET_IP
 ```
-_NOTE_: the password is provided in the email
-![](/doc/devcloud-ssh-login-proxy.png)
+3. Because you have copy pasted the command from Intel Developer Cloud portal, type 'yes' to continue, if prompted.
+4. User will be shown a password and prompted to enter the password. Enter the shown password.
+5. After entering the password, user will be logged into the launched Bare Metal Instance.
+6. To upload a file to launched instance, open a new terminal on your local system.
+7. Type scp -P 10022 [FILE_NAME] devcloud@localhost:[PATH_TO_DESTINATION]
+8. To download a file from launched instance, open a new terminal on your local system.
+9. Type scp -P 10022 devcloud@localhost:[PATH_TO_DESTINATION] .
+10. If you have multiple keys to be authorized to access your reserved instances, you can add those additional keys by following the next step without relaunching instance.
+11. In View Instances, on a launched instance, Click on Click here to add additional SSH Keys, to add your additional SSH keys.
+12. If you have changed your public key in profile after you launched an instance, you can add your new key by following the next step without relaunching instance.
+13. In View Instances, on a launched instance, Click on Click here to add additional SSH Keys, to add your additional SSH keys.
 
-#### Behind Proxy:
-If you are behind corporate Proxy, add the following lines into .ssh/config with your corporate PROXYSERVER and PROXYPORT, then run the above command.
-#For Linux Operating System:
-```
-Host 146.152.*.*
-ProxyCommand /usr/bin/nc -x PROXYSERVER:PROXYPORT %h %p
-```
-#For Non-Linux Operating System: (Install gitforwindows.org)
-```
-Host 146.152.*.*
-ProxyCommand "C:\Program Files\Git\mingw64\bin\connect.exe" -S PROXYSERVER:PROXYPORT %h %p
-```
-_NOTE: For more details on how to configure ssh please refer the email or [Intel SDP SSH Config](/doc/intel_sdp_ssh_login.md)._
+### 1.7 Help/Support Resources
+![](./doc/devcloud_support.png)
 
-### 1.4 Intel Project Amber info
+
+## 2 Intel Project Amber info
 You will also receive another email with subject "Intel® Trust Domain Extensions and Project Amber in Intel® DevCloud". The email will contain the Amber API key and Amber URL that you will need for attestation.
 
-### 1.5 Initial setup
+## 3 Use TDX VM
+### 3.1 Initial setup
 
 Once logged into the TDX-enabled system, clone the GitHub project and execute the initialization scripts.
 
@@ -149,7 +144,7 @@ cd tdx-amber-idc-preview/scripts
 ```
 
 
-### 1.6 Create TDVM
+### 3.2 Create TDVM
 ![](/doc/customer_create_guest_image.png)
 
 - Create a TD guest image from official Ubuntu 22.04 image as follows:
@@ -199,7 +194,7 @@ _NOTE: please change `my-guest` to your guest's name._
 
 _NOTE: Please check chapter 3.2 at the [Whitepaper: Linux* Stacks for Intel® Trust Domain Extension 1.0 v0.10](https://www.intel.com/content/www/us/en/content-details/783067/whitepaper-linux-stacks-for-intel-trust-domain-extension-1-0.html)_
 
-### 1.7 Check Trusted Execution Environment (TEE) environment
+### 3.3 Check Trusted Execution Environment (TEE) environment
 
 1. Check TD Report
 
@@ -210,14 +205,14 @@ to generate the td report run the following command
 tdx@tdx-guest:~$ tdx_tdreport
 ```
 
-### 1.8 Use Amber client to generate quote
+### 3.4 Use Amber client to generate quote
 
 ```
 tdx@tdx-guest:~$ sudo amber-cli quote
 
 ```
 
-### 1.9 Attestation
+### 3.5 Attestation
 Execute the following commands to perform the attestation.
 ```
 tdx@tdx-guest:~$ export AMBER_URL=<AMBER URL String>
@@ -227,7 +222,7 @@ tdx@tdx-guest:~$ sudo -E amber-cli token
 ```
 _Note: Make cure there are no white space before or after the API key_
 
-## 2. Run workload without attestation in TDVM
+## 4. Run workload without attestation in TDVM
 Running workloads in a TDVM is exactly the same as you would run the workload in a non-confidential VM.
 For example, run the nginx web server in a container
 ```
@@ -235,8 +230,9 @@ tdx@tdx-guest:~$sudo docker run -it --rm -d -p 8080:80 --name web nginx
 tdx@tdx-guest:~$curl http://localhost:8080
 ```
 
-## 3. Further Reading
+## 5. Further Reading
 
 - [Intel TDX Whitepaper](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-trust-domain-extensions.html)
 - [Amber Introduction](https://projectamber.intel.com/)
 - [Whitepaper: Linux* Stacks for Intel® Trust Domain Extension 1.0](https://www.intel.com/content/www/us/en/content-details/783067/whitepaper-linux-stacks-for-intel-trust-domain-extension-1-0.html) or [here](/doc/White%20Paper%20-%20Linux%20Stack%20for%20Intel®%20TDX-v0.10.pdf)
+- [Confidential Cloud Native Primitives (CCNP)](https://github.com/intel/confidential-cloud-native-primitives)

@@ -84,9 +84,9 @@ Setting up SSH Keys is an one time task.
 
 ![](./doc/devcloud_copy_ssh_command.png)
 
-**Note**: If the SSH command errored out for the option '-J', your ssh client version might be too old. Modify the SSH Command as per the format below and run.  
-**WARNING**: If you are connecting to Intel® Developer Cloud from your company Corporate Network, you will need to follow the section [Access from Corporate Network (optional)](#17-access-from-corporate-network-optional) below.
+**Note**: If you are connecting to Intel® Developer Cloud from your company Corporate Network, you will need to follow the section [Access from Corporate Network (optional)](#17-access-from-corporate-network-optional) below.
 
+**Note**: If the SSH command errored out for the option '-J', your ssh client version might be too old. Modify the SSH Command as per the format below and run.  
 ```
 ssh -o ProxyCommand="ssh -W %h:%p guest@JUMP_HOST_IP " USERNAME@TARGET_IP
 ```
@@ -133,8 +133,8 @@ ssh -o ProxyCommand="ssh -W %h:%p guest@JUMP_HOST_IP " USERNAME@TARGET_IP
    ```
 
 4. From your Lab Administrator, get PROXYSERVER and PROXYPORT in your Corporate Network for SSH, NOT for HTTP/HTTPS Proxy.
-
-5. Replace PROXYSERVER and PROXYPORT with the information you received from your lab administrator and save the SSH Config file.
+5. Replace PROXYSERVER and PROXYPORT with the information you received from your lab administrator and save the SSH Config file.  
+6. Go back to section [Access a Bare Metal Instance](#15-access-a-bare-metal-instance)
 
 
 ## 2 Intel® Project Amber info

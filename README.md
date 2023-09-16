@@ -1,12 +1,12 @@
-# Intel Developer Cloud (IDC) TDX Amber Preview
+# Intel® Developer Cloud (IDC) TDX & Amber Preview
 
-## 1. Customer On-Board DevCloud
+## 1. Customer On-Board Intel® Developer Cloud (Beta)
 
 ### 1.1 Registration
 
-1. Signup with your corporate email address at [Intel® Developer Zone](https://www.intel.com/content/www/us/en/forms/developer/standard-registration.html?tgt=https://www.intel.com/content/www/us/en/secure/developer/devcloud/cloud-launchpad.html), if not already done.
-2. Signin at [Intel® Developer Zone](https://www.intel.com/content/www/us/en/my-intel/developer-sign-in.html?redirect=https://scheduler.cloud.intel.com).
-3. Launch and access instance from [Intel® Developer Cloud Management Console](https://scheduler.cloud.intel.com/).
+1. [Sign up](https://www.intel.com/content/www/us/en/forms/developer/standard-registration.html?tgt=https://www.intel.com/content/www/us/en/secure/developer/devcloud/cloud-launchpad.html) for an Intel® Unified Login account with your corporate email address (if not already signed up).
+2. [Signin](https://scheduler.cloud.intel.com/) at the Intel® Developer Cloud Beta.
+
 
 ### 1.2 Setup - SSH Keys
 
@@ -27,7 +27,7 @@ Setting up SSH Keys is an one time task.
    ssh-keygen -t ed25519 -f %USERPROFILE%\.ssh\id_rsa
    ```
 
-3. If you are prompted to overwrite, select no.
+3. If you are prompted to overwrite, select no to use the existing keys
 4. Copy & Paste the following to your terminal/command prompt to open your public key.
 
    - Linux*/macOS*:
@@ -49,10 +49,71 @@ Setting up SSH Keys is an one time task.
 
     **Note**: If your key is not in default path/name, you must add IdentityFile parameter in SSH config file.
 
-    **WARNING**: If you are connecting to Intel Developer Cloud from your company Corporate Network, you will need to follow the section [Access from Corporate Network](#13-access-from-corporate-network).
+### 1.3 Request Access to TDX Bare Metal Instance
 
-### 1.3 Access from Corporate Network
-**WARNING**: If you are connecting to Intel Developer Cloud from your company Corporate Network, you will need to update SSH config file.
+1. All Bare Metal Instances are available upon request only. Follow the instructions below to request a Bare Metal Instance.
+2. Click Instances from top blue navigation bar
+3. Click on check box of chosen instance "Beta - Intel® Trust Domain Extensions (Intel® TDX) with 4th Generation Intel® Xeon® Scalable processors"
+4. Click Launch Instance
+![](./doc/devcloud_launch_tdx_baremetal_instance.png)
+5. Review the details and Click 'Request Instance'
+![](./doc/devcloud_request_instance.png)
+6. Enter your company name in full and provide purpose of this instance request in few lines.
+![](./doc/devcloud_input_company_info.png)
+7. If your request is approved, Intel® Developer Cloud Customer Response Team will respond within 2-3 business days.
+
+### 1.4 Launch a Bare Metal Instance
+1. To launch a Bare Metal Instance, follow the instructions below.
+2. Click Instances from top blue navigation bar
+3. Click on check box of requried instance
+4. Click Launch Instance
+5. Read the Intel® Developer Cloud Access Agreement and Click check box agree, if you agree
+6. Click Launch Instance
+![](./doc/devcloud_launch_instance.png)
+7. If user is allowed to launch this instance, instance will be launched and user will be redirected to View Instances.
+8. Bare Metal Instance provisioning might take few minutes.
+9. If you would like to terminate instance at any time, click the red colored icon in screen shot above.
+
+**Note**: Only your current public key will be authorized to access this instance.
+**Note**: If you have multiple keys to be authorized to access your reserved instances, or you have changed your public key in profile, you need add those keys in each reserved instance separately.
+
+### 1.5 Access a Bare Metal Instance
+
+1. WARNING: All Bare Metal Instances get auto terminated after 7 days from launch time.
+2. To access a launched Bare Metal Instance, from 'View Instances', Click on 'Click here to copy the SSH command' and paste in your terminal or command prompt.
+
+![](./doc/devcloud_copy_ssh_command.png)
+
+**Note**: If the SSH command errored out for the option '-J', your ssh client version might be too old. Modify the SSH Command as per the format below and run.  
+**WARNING**: If you are connecting to Intel® Developer Cloud from your company Corporate Network, you will need to follow the section Access from Corporate Network (optional) below.
+
+```
+ssh -o ProxyCommand="ssh -W %h:%p guest@JUMP_HOST_IP " USERNAME@TARGET_IP
+```
+
+3. Because you have copy pasted the command from Intel® Developer Cloud portal, type 'yes' to continue, if prompted.
+4. User will be shown a password and prompted to enter the password. Enter the shown password.
+5. After entering the password, user will be logged into the launched Bare Metal Instance.
+6. To upload a file to launched instance, open a new terminal on your local system.
+7. Type scp -P 10022 [FILE_NAME] devcloud@localhost:[PATH_TO_DESTINATION]
+8. To download a file from launched instance, open a new terminal on your local system.
+9. Type scp -P 10022 devcloud@localhost:[PATH_TO_DESTINATION] .
+10. If you have multiple keys to be authorized to access your reserved instances, you can add those additional keys by following the next step without relaunching instance.
+11. In View Instances, on a launched instance, Click on Click here to add additional SSH Keys, to add your additional SSH keys.
+
+![](./doc/devcloud_additional_ssh_key.png)
+
+12. If you have changed your public key in profile after you launched an instance, you can add your new key by following the next step without relaunching instance.
+13. In View Instances, on a launched instance, Click on Click here to add additional SSH Keys, to add your additional SSH keys.
+
+![](./doc/devcloud_additional_ssh_key.png)
+
+### 1.6 Help/Support Resources
+
+![](./doc/devcloud_support.png)
+
+### 1.7 Access from Corporate Network (optional)
+**WARNING**: If you are connecting to Intel® Developer Cloud from your company Corporate Network, you will need to update SSH config file.
 
 **Note**: If you connect using Command Prompt on Microsoft* Windows* Operating System, you must install [gitforwindows](https://gitforwindows.org/).
 
@@ -75,70 +136,8 @@ Setting up SSH Keys is an one time task.
 
 5. Replace PROXYSERVER and PROXYPORT with the information you received from your lab administrator and save the SSH Config file.
 
-### 1.4 Request Access to TDX Bare Metal Instance
 
-1. All Bare Metal Instances are available upon request only. Follow the instructions below to request a Bare Metal Instance.
-2. Click Instances from top blue navigation bar
-3. Click on check box of chosen instance "Beta - Intel® Trust Domain Extensions (Intel® TDX) with 4th Generation Intel® Xeon® Scalable processors"
-4. Click Launch Instance
-![](./doc/devcloud_launch_tdx_baremetal_instance.png)
-5. Review the details and Click 'Request Instance'
-![](./doc/devcloud_request_instance.png)
-6. Enter your company name in full and provide purpose of this instance request in few lines.
-![](./doc/devcloud_input_company_info.png)
-7. If your request is approved, Intel Developer Cloud Customer Response Team will respond within 2-3 business days.
-
-### 1.5 Launch a Bare Metal Instance
-1. To launch a Bare Metal Instance, follow the instructions below.
-2. Click Instances from top blue navigation bar
-3. Click on check box of requried instance
-4. Click Launch Instance
-5. Read the Intel(R) Developer Cloud Access Agreement and Click check box agree, if you agree
-6. Click Launch Instance
-![](./doc/devcloud_launch_instance.png)
-7. If user is allowed to launch this instance, instance will be launched and user will be redirected to View Instances.
-8. Bare Metal Instance provisioning might take few minutes.
-9. If you would like to terminate instance at any time, click the red colored icon in screen shot above.
-
-**Note**: Only your current public key will be authorized to access this instance.
-**Note**: If you have multiple keys to be authorized to access your reserved instances, or you have changed your public key in profile, you need add those keys in each reserved instance separately.
-
-### 1.6 Access a Bare Metal Instance
-
-1. WARNING: All Bare Metal Instances get auto terminated after 7 days from launch time.
-2. To access a launched Bare Metal Instance, from 'View Instances', Click on 'Click here to copy the SSH command' and paste in your terminal or command prompt.
-
-![](./doc/devcloud_copy_ssh_command.png)
-
-**Note**: If the SSH command errored out for the option '-J', your ssh client version might be too old. Modify the SSH Command as per the format below and run.
-
-```
-ssh -o ProxyCommand="ssh -W %h:%p guest@JUMP_HOST_IP " USERNAME@TARGET_IP
-```
-
-3. Because you have copy pasted the command from Intel Developer Cloud portal, type 'yes' to continue, if prompted.
-4. User will be shown a password and prompted to enter the password. Enter the shown password.
-5. After entering the password, user will be logged into the launched Bare Metal Instance.
-6. To upload a file to launched instance, open a new terminal on your local system.
-7. Type scp -P 10022 [FILE_NAME] devcloud@localhost:[PATH_TO_DESTINATION]
-8. To download a file from launched instance, open a new terminal on your local system.
-9. Type scp -P 10022 devcloud@localhost:[PATH_TO_DESTINATION] .
-10. If you have multiple keys to be authorized to access your reserved instances, you can add those additional keys by following the next step without relaunching instance.
-11. In View Instances, on a launched instance, Click on Click here to add additional SSH Keys, to add your additional SSH keys.
-
-![](./doc/devcloud_additional_ssh_key.png)
-
-12. If you have changed your public key in profile after you launched an instance, you can add your new key by following the next step without relaunching instance.
-13. In View Instances, on a launched instance, Click on Click here to add additional SSH Keys, to add your additional SSH keys.
-
-![](./doc/devcloud_additional_ssh_key.png)
-
-### 1.7 Help/Support Resources
-
-![](./doc/devcloud_support.png)
-
-
-## 2 Intel Project Amber info
+## 2 Intel® Project Amber info
 You will also receive another email with subject "Intel® Trust Domain Extensions and Project Amber in Intel® DevCloud". The email will contain the Amber API key and Amber URL that you will need for attestation.
 
 ## 3 Use TDX VM
@@ -241,7 +240,7 @@ tdx@tdx-guest:~$curl http://localhost:8080
 
 ## 5. Further Reading
 
-- [Intel TDX Whitepaper](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-trust-domain-extensions.html)
+- [Intel® TDX Whitepaper](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-trust-domain-extensions.html)
 - [Amber Introduction](https://projectamber.intel.com/)
 - [Whitepaper: Linux* Stacks for Intel® Trust Domain Extension 1.0](https://www.intel.com/content/www/us/en/content-details/783067/whitepaper-linux-stacks-for-intel-trust-domain-extension-1-0.html) or [here](/doc/White%20Paper%20-%20Linux%20Stack%20for%20Intel®%20TDX-v0.10.pdf)
 - [Confidential Cloud Native Primitives (CCNP)](https://github.com/intel/confidential-cloud-native-primitives)

@@ -85,7 +85,7 @@ Setting up SSH Keys is an one time task.
 ![](./doc/devcloud_copy_ssh_command.png)
 
 **Note**: If the SSH command errored out for the option '-J', your ssh client version might be too old. Modify the SSH Command as per the format below and run.  
-**WARNING**: If you are connecting to Intel® Developer Cloud from your company Corporate Network, you will need to follow the section Access from Corporate Network (optional) below.
+**WARNING**: If you are connecting to Intel® Developer Cloud from your company Corporate Network, you will need to follow the section [Access from Corporate Network (optional)](#17-access-from-corporate-network-optional) below.
 
 ```
 ssh -o ProxyCommand="ssh -W %h:%p guest@JUMP_HOST_IP " USERNAME@TARGET_IP

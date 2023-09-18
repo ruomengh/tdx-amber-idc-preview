@@ -101,13 +101,18 @@ After receiving the approval email follow these below steps to launch the TDX Sy
 
 ![](./doc/devcloud_additional_ssh_key.png)
 
-   **Note** To upload a file to launched instance, open a new terminal on your local system and use the following cmd.
+   **Note** To upload a file to TDX system, open a new terminal on your local system and use the following cmd.
    ```
    scp -P 10022 [LOCAL_FILE_NAME] devcloud@localhost:[PATH_TO_DESTINATION]
    ```
-   **Note** To download a file from launched instance, open a new terminal on your local system and use the follwoing cmd.
+   To copy the same file in to TDVM use the following cmd from the TDX system
    ```
-   scp -P 10022 devcloud@localhost:[PATH_TO_DESTINATION] .
+   scp [LOCAL_FILE_NAME] devcloud@[TDVM_IP_ADDRESS]:[PATH_TO_DESTINATION]
+   ```
+   
+   **Note** To download a file from TDX system, open a new terminal on your local system and use the follwoing cmd.
+   ```
+   scp -P 10022 devcloud@localhost:[PATH_TO_REMOTE_FILE]  .
    ```
 
 ### 1.6 Help/Support Resources

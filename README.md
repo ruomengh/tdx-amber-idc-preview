@@ -4,8 +4,8 @@
 
 ### 1.1 Registration
 
-1. [Sign up](https://www.intel.com/content/www/us/en/forms/developer/standard-registration.html?tgt=https://www.intel.com/content/www/us/en/secure/developer/devcloud/cloud-launchpad.html) for an Intel® Unified Login account with your corporate email address (if not already signed up).
-2. [Signin](https://scheduler.cloud.intel.com/) at the Intel® Developer Cloud Beta.
+1. [Sign up](https://www.intel.com/content/www/us/en/developer/tools/devcloud/prelaunch-services.html) for an Intel® Unified Login account with your corporate email address (if not already signed up).
+2. [Signin](https://www.intel.com/content/www/us/en/developer/tools/devcloud/prelaunch-services.html) at the Intel® Developer Cloud Beta.
 
 
 ### 1.2 Setup - SSH Keys
@@ -49,8 +49,8 @@ Setting up SSH Keys is an one time task.
 
     **Note**: If your key is not in default path/name, you must add IdentityFile parameter in SSH config file.
 
-### 1.3 Request Access to TDX Bare Metal Instance  
-Once the SSH keys are created and the public key uploaded, proceed to request access to the TDX System. 
+### 1.3 Request Access to TDX Bare Metal Instance
+Once the SSH keys are created and the public key uploaded, proceed to request access to the TDX System.
 TDX Systems are available upon request only so follow the instructions below to request one.
 1. Go to [https://cloud.intel.com](https://cloud.intel.com) and Sign In (if not already)
 2. Click Instances from top blue navigation bar
@@ -71,7 +71,7 @@ After receiving the approval email follow these below steps to launch the TDX Sy
 5. Review the agreement, and if you agree, select the "I agree" checkbox, then click "Launch Instance"
    <img src="https://github.com/IntelConfidentialComputing/tdx-amber-idc-preview/assets/38536938/5da82675-f7d9-4b8c-aa56-1ba3f62baf81"  width="900" height="400">
 
-7. Please wait (2 minutes) for the instance to be provisioned and launched. 
+7. Please wait (2 minutes) for the instance to be provisioned and launched.
 8. On successful launch, you will be redirected to "View Instances" tab as shown below.
    <img src="https://github.com/IntelConfidentialComputing/tdx-amber-idc-preview/assets/38536938/d5e7f3ec-dd73-4565-bb13-bde470dcffa6"  width="1000" height="400">
 
@@ -109,7 +109,7 @@ After receiving the approval email follow these below steps to launch the TDX Sy
    ```
    scp [LOCAL_FILE_NAME] devcloud@[TDVM_IP_ADDRESS]:[PATH_TO_DESTINATION]
    ```
-   
+
    **Note** To download a file from TDX system, open a new terminal on your local system and use the follwoing cmd.
    ```
    scp -P 10022 devcloud@localhost:[PATH_TO_REMOTE_FILE]  .
@@ -140,7 +140,7 @@ After receiving the approval email follow these below steps to launch the TDX Sy
    ```
 
 4. From your Lab Administrator, get PROXYSERVER and PROXYPORT in your Corporate Network for SSH, NOT for HTTP/HTTPS Proxy.
-5. Replace PROXYSERVER and PROXYPORT with the information you received from your lab administrator and save the SSH Config file.  
+5. Replace PROXYSERVER and PROXYPORT with the information you received from your lab administrator and save the SSH Config file.
 6. Go back to section [Access a Bare Metal Instance](#15-access-a-bare-metal-instance)
 
 

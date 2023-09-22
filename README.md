@@ -52,7 +52,7 @@ Setting up SSH Keys is an one time task.
 ### 1.3 Request Access to TDX Bare Metal Instance
 Once the SSH keys are created and the public key uploaded, proceed to request access to the TDX System.
 TDX Systems are available upon request only so follow the instructions below to request one.
-1. Go to [https://cloud.intel.com](https://cloud.intel.com) and Sign In (if not already)
+1. Go to [https://scheduler.cloud.intel.com](https://scheduler.cloud.intel.com) and Sign In (if not already)
 2. Click Instances from top blue navigation bar
 3. Click on check box for "Beta - Intel® Trust Domain Extensions (Intel® TDX) with 4th Generation Intel® Xeon® Scalable processors"
 4. Click on the "Launch Instance" blue button at the bottom of the list
@@ -64,7 +64,7 @@ TDX Systems are available upon request only so follow the instructions below to 
 
 ### 1.4 Reserve & Launch the TDX system
 After receiving the approval email follow these below steps to launch the TDX System.
-1. Go to [https://cloud.intel.com](https://cloud.intel.com) and Sign In (if not already)
+1. Go to [https://scheduler.cloud.intel.com](https://scheduler.cloud.intel.com) and Sign In (if not already)
 2. Click Instances from top blue navigation bar
 3. Click on check box for "Beta - Intel® Trust Domain Extensions (Intel® TDX) with 4th Generation Intel® Xeon® Scalable processors"
 4. Click on the "Launch Instance" blue button at the bottom of the list

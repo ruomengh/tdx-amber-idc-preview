@@ -1,6 +1,9 @@
 <domain type='kvm' xmlns:qemu='http://libvirt.org/schemas/domain/qemu/1.0'>
   <name>td-guest-grub-on-ubuntu-host</name>
   <memory unit='KiB'>2097152</memory>
+  <memoryBacking>
+    <source type='memfd-private'/>
+  </memoryBacking>
   <vcpu placement="static">1</vcpu>
   <os>
     <type arch='x86_64' machine='q35'>hvm</type>
@@ -32,9 +35,8 @@
       <source file='/path/to/image'/>
       <target dev='vda' bus='virtio'/>
     </disk>
-    <interface type='bridge'>
-      <source bridge='virbr0'/>
-      <model type='virtio'/>
+    <interface type="user">
+      <model type="virtio"/>
     </interface>
     <console type='pty'>
       <target type='virtio' port='0'/>
@@ -46,7 +48,6 @@
   </devices>
   <allowReboot value='no'/>
   <launchSecurity type='tdx'>
-    <Quote-Generation-Service>vsock:2:4050</Quote-Generation-Service>
     <policy>0x10000000</policy>
   </launchSecurity>
   <qemu:commandline>
@@ -54,4 +55,3 @@
     <qemu:arg value='host,-kvm-steal-time'/>
   </qemu:commandline>
 </domain>
-

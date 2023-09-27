@@ -51,7 +51,6 @@ Host 146.152.*.*
 ProxyCommand "C:\Program Files\Git\mingw64\bin\connect.exe" -S PROXYSERVER:PROXYPORT %h %p
 ```
 _NOTE: For more details on how to configure ssh please refer the email._
-_NOTE: For more details on how to configure ssh please refer the email._
 
 ### 1.4 Intel Project Amber info
 You will also receive another email with subject "Intel® Trust Domain Extensions and Project Amber in Intel® DevCloud". The email will contain the Amber API key and Amber URL that you will need for attestation.
@@ -80,8 +79,8 @@ Example
 
 - Start TDVM via libvirt
 After creating the guest image, use the following command to create a TDVM
+
 ```
-./start-virt.sh -i <image file name> -n <guest vm name>
 ./start-virt.sh -i <image file name> -n <guest vm name>
 ```
 Example
@@ -117,7 +116,6 @@ _NOTE: To exit a running VM please use ^] (Ctrl + ])_
 _NOTE: please change `my-guest` to your guest's name._
 
 _NOTE: Please check chapter 3.4 at the [Whitepaper: Linux* Stacks for Intel® Trust Domain Extension 1.5 v0.1](https://www.intel.com/content/www/us/en/content-details/789198/whitepaper-linux-stacks-for-intel-trust-domain-extensions-1-5.html)_
-_NOTE: Please check chapter 3.4 at the [Whitepaper: Linux* Stacks for Intel® Trust Domain Extension 1.5 v0.1](https://www.intel.com/content/www/us/en/content-details/789198/whitepaper-linux-stacks-for-intel-trust-domain-extensions-1-5.html)_
 
 ### 1.7 Check Trusted Execution Environment (TEE) environment
 
@@ -132,10 +130,8 @@ tdx@tdx-guest:~$ tdx_tdreport
 ```
 
 ### 1.8 Use trustauthority client to generate quote
-### 1.8 Use trustauthority client to generate quote
 
 ```
-tdx@tdx-guest:~$ sudo trustauthority-cli quote
 tdx@tdx-guest:~$ sudo trustauthority-cli quote
 ```
 
@@ -150,22 +146,13 @@ tdx@tdx-guest:~$ vi config.json
 }
 tdx@tdx-guest:~$ trustauthority-cli create-key-pair -k key.pem
 tdx@tdx-guest:~$ sudo -E trustauthority-cli token -c config.json -f key.pem
-tdx@tdx-guest:~$ vi config.json
-# Add below content in config.json and save the file
-{
-    "trustauthority_api_url": "<trustauthority attestation api url>",
-    "trustauthority_api_key": "<trustauthority attestation api key>"
-}
-tdx@tdx-guest:~$ trustauthority-cli create-key-pair -k key.pem
-tdx@tdx-guest:~$ sudo -E trustauthority-cli token -c config.json -f key.pem
 ```
 
 ## 2. Run workload without attestation in TDVM
 Running workloads in a TDVM is exactly the same as you would run the workload in a non-confidential VM.
 For example, run the nginx web server in a container
+
 ```
-tdx@tdx-guest:~$ sudo docker run -it --rm -d -p 8080:80 --name web nginx
-tdx@tdx-guest:~$ curl http://localhost:8080
 tdx@tdx-guest:~$ sudo docker run -it --rm -d -p 8080:80 --name web nginx
 tdx@tdx-guest:~$ curl http://localhost:8080
 ```
@@ -174,5 +161,4 @@ tdx@tdx-guest:~$ curl http://localhost:8080
 
 - [Intel TDX Whitepaper](https://www.intel.com/content/www/us/en/developer/articles/technical/intel-trust-domain-extensions.html)
 - [Amber Introduction](https://projectamber.intel.com/)
-- [Whitepaper: Linux* Stacks for Intel® Trust Domain Extension 1.5](https://www.intel.com/content/www/us/en/content-details/789198/whitepaper-linux-stacks-for-intel-trust-domain-extensions-1-5.html)
 - [Whitepaper: Linux* Stacks for Intel® Trust Domain Extension 1.5](https://www.intel.com/content/www/us/en/content-details/789198/whitepaper-linux-stacks-for-intel-trust-domain-extensions-1-5.html)

@@ -144,7 +144,7 @@ tdx@tdx-guest:~$ vi config.json
     "trustauthority_api_url": "<trustauthority attestation api url>",
     "trustauthority_api_key": "<trustauthority attestation api key>"
 }
-tdx@tdx-guest:~$ trustauthority-cli create-key-pair -k key.pem
+tdx@tdx-guest:~$ trustauthority-cli create-key-pair --pub-path key.pem
 tdx@tdx-guest:~$ sudo -E trustauthority-cli token -c config.json -f key.pem
 ```
 

@@ -10,16 +10,16 @@ TDX_TOOLS_DIR=$(realpath "${CURR_DIR}/../tdx-tools")
 ARTIFACTS_DIR=$(realpath "${CURR_DIR}/../artifacts")
 UBUNTU_ISO_DIR="${ARTIFACTS_DIR}/ubuntu-iso"
 UBUNTU_ISO_FILENAME="jammy-server-cloudimg-amd64.img"
-RELEASE="2023ww39"
+RELEASE="2023ww44"
 REPO_LOCAL="/srv/artifacts"
 OFFICIAL_UBUNTU_IMAGE="https://cloud-images.ubuntu.com/jammy/current/"
-DCAP_REPO_URL="https://download.01.org/intel-sgx/sgx-dcap/1.18/linux/distro/ubuntu22.04-server/sgx_debian_local_repo.tgz"
+DCAP_REPO_URL="https://download.01.org/intel-sgx/sgx-dcap/1.19/linux/distro/ubuntu22.04-server/sgx_debian_local_repo.tgz"
 DCAP_REPO_FILENAME="sgx_debian_local_repo.tgz"
 
-TDX_MVP_VERSION_KERNEL="6.2.16-v4.9.mvp39-generic" 
-TDX_MVP_VERSION_QEMU="7.2.0-v3.9.mvp27"  
+TDX_MVP_VERSION_KERNEL="6.2.16-v5.1.mvp41-generic" 
+TDX_MVP_VERSION_QEMU="7.2.0-v4.0.mvp28"  
 TDX_MVP_VERSION_LIBVIRT="8.6.0-v3.6.mvp16"  
-TDX_MVP_VERSION_OVMF="2023.09-ww36.2.mvp18"  
+TDX_MVP_VERSION_OVMF="2023.09-ww36.2.mvp19"  
 
 info() {
     echo -e "\e[1;33mINFO: $*\e[0;0m"

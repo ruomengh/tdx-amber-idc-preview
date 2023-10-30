@@ -226,7 +226,8 @@ install_tdx_guest_packages() {
         --copy-in ${GUEST_REPO}/sgx_debian_local_repo/pool/main/libt/libtdx-attest/:/srv/guest_repo/ \
         --run-command "cd /srv/guest_repo/all && dpkg -i *.deb || true" \
         --run-command "cd /srv/guest_repo/amd64 && dpkg -i *.deb || true" \
-        --run-command "cd /srv/guest_repo/libtdx-attest && dpkg -i *.deb || true"
+        --run-command "cd /srv/guest_repo/libtdx-attest && dpkg -i *.deb || true" \
+        --run-command "apt --fix-broken -y install"
     ok "Install the TDX guest packages into guest image..."
 }
 
@@ -234,6 +235,12 @@ install_tdx_measure_tool() {
     virt-customize -a /tmp/${GUEST_IMG} \
         --run-command "python3 -m pip install pytdxmeasure"
     ok "Install the TDX measurement tool..."
+}
+
+install_ai_workload() {
+    virt-customize -a /tmp/${GUEST_IMG} \
+	--run ${CURR_DIR}/scripts/install_ai_workload.sh \
+	--copy-in ${CURR_DIR}/scripts/run_ai_workload.sh:/root/example_ai_workload
 }
 
 cleanup() {
@@ -267,6 +274,7 @@ resize_guest_image
 config_cloud_init
 install_tdx_guest_packages
 install_tdx_measure_tool
+install_ai_workload
 cleanup
 
 ok "Please get the output TDX guest image file at /tmp/${GUEST_IMG}"

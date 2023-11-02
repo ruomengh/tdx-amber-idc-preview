@@ -16,6 +16,8 @@ GUEST_NAME="tdx-guest"
 GUEST_ROOTDIR=/tmp/$USER/libvirt-vms
 TEMPLATE="${CURR_DIR}/tdx_libvirt_ubuntu_host.template"
 FORCE=false
+VCPU_NUM=1
+MEM_SIZE=4
 
 usage() {
     cat << EOM
@@ -24,6 +26,8 @@ Usage: $(basename "$0") [OPTION]...
   -n <guest name>           Name of TD guest
   -t <template file>        Default is ${TEMPLATE}
   -f                        Force recreate
+  -v <vcpu number>          VM vCPU number
+  -m <memory size in GB>    VM memory size in GB
   -h                        Show this help
 EOM
 }
@@ -37,10 +41,12 @@ pre-check() {
 }
 
 process_args() {
-    while getopts ":i:n:fh" option; do
+    while getopts ":i:n:v:m:fh" option; do
         case "$option" in
             i) GUEST_IMG=$OPTARG;;
             n) GUEST_NAME=$OPTARG;;
+            v) VCPU_NUM=$OPTARG;;
+            m) MEM_SIZE=$OPTARG;;
             f) FORCE=true;;
             h) usage
                exit 0
@@ -53,10 +59,25 @@ process_args() {
         esac
     done
 
+    # Validate the number of vCPUs
+    if ! [[ ${VCPU_NUM} =~ ^[0-9]+$ && ${VCPU_NUM} -gt 0 ]]; then
+        echo "Error: Invalid number of vCPUs: ${VCPU_NUM}"
+        usage
+        exit 1
+    fi
+
+    # Validate the size of memory
+    if ! [[ ${MEM_SIZE} =~ ^[0-9]+$ && ${MEM_SIZE} -gt 0 ]]; then
+        echo "Error: Invalid memory size: ${MEM_SIZE}"
+        usage
+        exit 1
+    fi
+
     echo "====================================================================="
     echo " Use template   : ${TEMPLATE}"
     echo " Guest XML      : ${GUEST_ROOTDIR}/${GUEST_NAME}.xml"
     echo " Guest Image    : ${GUEST_ROOTDIR}/${GUEST_NAME}.qcow2"
+    echo " VMSpec         : ${VCPU_NUM} vcpu/${MEM_SIZE}GB memory"
     echo " Force Recreate : ${FORCE}"
     echo "====================================================================="
 
@@ -81,7 +102,7 @@ process_args() {
     fi
 
     if [[ ! -f ${TEMPLATE} ]]; then
-        echo "Template ${TEMPLATE} does not exist".
+        echo "Error: Template ${TEMPLATE} does not exist".
         echo "Please specify via -t"
         exit 1
     fi
@@ -97,6 +118,8 @@ create-vm() {
     echo "> Modify configurations..."
     sed -i "s/.*<name>.*/<name>${GUEST_NAME}<\/name>/" "${GUEST_ROOTDIR}/${GUEST_NAME}.xml"
     sed -i "s#/path/to/image#${GUEST_ROOTDIR}/${GUEST_NAME}.qcow2#" "${GUEST_ROOTDIR}/${GUEST_NAME}.xml"
+    sed -i "s/vcpu_num/${VCPU_NUM}/g" "${GUEST_ROOTDIR}/${GUEST_NAME}.xml"
+    sed -i "s/mem_size/${MEM_SIZE}/g" "${GUEST_ROOTDIR}/${GUEST_NAME}.xml"
 }
 
 start-vm() {

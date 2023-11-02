@@ -236,6 +236,12 @@ install_tdx_measure_tool() {
     ok "Install the TDX measurement tool..."
 }
 
+install_ai_workload() {
+    virt-customize -a /tmp/${GUEST_IMG} \
+	--run ${CURR_DIR}/scripts/install_ai_workload.sh \
+	--copy-in ${CURR_DIR}/scripts/run_ai_workload.sh:/root/example_ai_workload
+}
+
 cleanup() {
     if [[ -f ${CURR_DIR}/"SHA256SUMS" ]]; then
         rm ${CURR_DIR}/"SHA256SUMS"
@@ -267,6 +273,7 @@ resize_guest_image
 config_cloud_init
 install_tdx_guest_packages
 install_tdx_measure_tool
+install_ai_workload
 cleanup
 
 ok "Please get the output TDX guest image file at /tmp/${GUEST_IMG}"

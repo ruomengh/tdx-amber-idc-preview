@@ -36,7 +36,7 @@ fi
 
 # VM configurations
 CPUS=1
-MEM=2G
+MEM=4G
 SGX_EPC_SIZE=64M
 
 # Installed from the package of intel-mvp-tdx-tdvf

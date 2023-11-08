@@ -1,6 +1,6 @@
 # Intel® Developer Cloud (IDC) TDX & Amber Preview
 
-**WARNING**: This document is for customers who use a system with security update (kernel version 6.2.16) and Intel® Trust Authority GA instances.
+**WARNING**: This document is for customers who use a system with kernel version 6.2.16 and Intel® Trust Authority GA instances.
 
 ## 1. Customer On-Board Intel® Developer Cloud (Beta)
 
@@ -248,17 +248,21 @@ tdx@tdx-guest:~$ sudo trustauthority-cli quote
 ```
 
 - To get Intel Trust Authority signed token.
+
+`token` command requires Intel Trust Authority configuration to be passed in json format. Save below data in config.json file.
 ```
-`token` command requires Intel Trust Authority configuration to be passed in json format
 {
     "trustauthority_api_url": "<trustauthority attestation api url>",
     "trustauthority_api_key": "<trustauthority attestation api key>",
     "trustauthority_url": "<trustauthority url>"
 }
-Save this data in config.json file and invoke `token` command
-
+```
+Invoke `token` command.
+```
 tdx@tdx-guest:~$ sudo trustauthority-cli token --config config.json --user-data <base64 encoded userdata> --policy-ids <comma separated trustauthority attestation policy ids>
+```
 OR
+```
 tdx@tdx-guest:~$ sudo trustauthority-cli token --config config.json --pub-path <public key file path> --policy-ids <comma separated trustauthority attestation policy ids>
 ```
 _NOTE: The response format is like `Trace Id: <TraceID>=<token>`. Please copy the token part as input of the next step._
@@ -277,21 +281,77 @@ tdx@tdx-guest:~$ sudo docker run -it --rm -d -p 8080:80 --name web nginx
 tdx@tdx-guest:~$ curl http://localhost:8080
 ```
 
+## 5. Run AI workload accelerated by AMX in TD
+
+Intel® AMX is a new built-in accelerator that improves the performance of deeplearning training and inference on the CPU. AI workload boosted by Intel AMX can run in a TD. To demonstrate AMX capability in TDF, here come 2 examples of AI workload running in TD.
+
+### Prerequisite
+
+ - Create TD guest image with docker images for AI workload.
+ ```
+ ./create-guest-image.sh -o <image file name> -u <username> -p <password> -n <guest vm name> -s <image file size in GB> -a
+ ```
+ For example:
+ ```
+ ./create-guest-image.sh -o tdx-guest-ai.qcow2 -u tdx -p 123TdVMTest -n ai-guest -s 40 -a
+ ```
+
+ - Create TD using above guest image. It's recommended to alloacte at least 8vCPU and 32GB memory to the TD for AI workload.
+```
+./start-virt.sh -i <image file name> -n <guest vm name> -c 8 -m 32
+```
+For example:
+```
+./start-virt.sh -i tdx-guest-ai.qcow2 -n ai-guest -c 8 -m 32
+```
+
 ### Run AI workload accelerated by AMX
-Intel® AMX is a new built-in accelerator that improves the performance of deeplearning training and inference on the CPU. AI workload boosted by Intel AMX can run in a TD. To demonstrate AMX capability, Intel® Optimization for TensorFlow, a pre-trained model of mobilenet_v1 and the benchmark tool have been integrated in TD guest image by default. You can use the following commands to run the AI workload with or without AMX directly. The output will demonstrate AMX acceleration effect.
 
+Intel® Optimization for TensorFlow, a pre-trained model of mobilenet_v1 and the benchmark tool have been integrated in TD guest image by default. In this example, you can use below commands to run the benchmark with or without AMX. The output will demonstrate AMX acceleration effect.
+
+- Connect to the TD created in prerequisite, run below commands.
 ```
-# Start a TD following above step. Connect to the TD, run below commands.
-
 tdx@tdx-guest:~$ sudo su
-tdx@tdx-guest:~# cd /root/example_ai_workload
-
-# Run AI workload with AMX enabled.
-tdx@tdx-guest:~$ ./run_ai_workload.sh
-
-# Run AI workload with AMX disabled.
-tdx@tdx-guest:~$ ./run_ai_workload.sh -d
+root@tdx-guest:~# cd /root/example_ai_workload
 ```
+- Run AI workload with AMX enabled. The output will show "Average Throughput: `<image number>` images/s".
+```
+root@tdx-guest:~# ./run_ai_workload.sh
+```
+- Run AI workload with AMX disabled. The output will show "Average Throughput: `<image number>` images/s".
+```
+root@tdx-guest:~# ./run_ai_workload.sh -d
+```
+
+AMX acceleration effect is demonstrated by comparing average throughput of AMX-enabled and AMX-disabled.
+
+### Run Cloud Native AI Pipeline (CNAP)
+
+Cloud native AI pipeline (CNAP) is a multiple-stream and real-time inference pipeline. It provides several microservices to receive input streams, queue the streams in Redis and run inference of the frames. It's a AI workload designed and implemented to fit cloud native model. It's also accelerated by AMX. Please see more details in [Cloud Native AI Pipeline (CNAP)](https://github.com/intel/cloud-native-ai-pipeline).
+
+In this example, you can use below commands to run the CNAP workload in containers and check AMX acceleration effect.
+
+
+- Connect to the TD, run below commands.
+```
+tdx@tdx-guest:~$ sudo su
+root@tdx-guest:~# cd /root/example_cnap
+```
+- Run CNAP workload. There will be 2 inference containers running, one for AMX-enabled and the other for AMX-disabled.
+```
+root@tdx-guest:~# ./cnap_docker_setup.sh
+```
+
+- Check inference FPS of AMX-enabled container.
+```
+root@tdx-guest:~# docker container logs cnap-inference-amx 2>&1 | grep infer_fps | tail -n 1 | awk '{print $5, $6}'
+```
+
+- Check inference FPS of AMX-disabled container.
+```
+root@tdx-guest:~# docker container logs cnap-inference-non 2>&1 | grep infer_fps | tail -n 1 | awk '{print $5, $6}'
+```
+AMX acceleration effect is demonstrated by comparing FPS of AMX-enabled and AMX-disabled.
 
 ## 5. Further Reading
 

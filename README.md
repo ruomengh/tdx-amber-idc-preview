@@ -177,13 +177,13 @@ Example
 
 - Start TD via libvirt
 
-After creating the guest image, use the following command to create a TD
+After creating the guest image, use the following command to create a TD.
 ```
-./start-virt.sh -i <image file name> -n <guest vm name>
+./start-virt.sh -i <image file name> -n <guest vm name> -c <vCPU number> -m <memory size in GB>
 ```
 For example:
 ```
-./start-virt.sh -i tdx-guest.qcow2 -n my-guest
+./start-virt.sh -i tdx-guest.qcow2 -n my-guest -c 4 -m 16
 ```
 
 _NOTE: You can start more than one TD with different guest vm names._
@@ -233,7 +233,7 @@ tdx@tdx-guest:~$ sudo tdx_tdreport
 ```
 
 ### 3.4 Attestation
-Execute the following commands to perform the attestation using trustauthority-cli. For more details of trustauthority-cli usage, please refer to [Intel® Trust Authority TDX CLI](https://github.com/intel/trustauthority-client/blob/main/tdx-cli/README.md).
+Execute the following commands to perform the attestation using [trustauthority-client](https://github.com/intel/trustauthority-client). For more details of trustauthority-cli usage, please refer to [Intel® Trust Authority TDX CLI](https://github.com/intel/trustauthority-client/blob/main/tdx-cli/README.md).
 
 _NOTE: trustauthority-cli has been installed in TD guest image by default. You can use it directly._
 
@@ -265,7 +265,7 @@ OR
 ```
 tdx@tdx-guest:~$ sudo trustauthority-cli token --config config.json --pub-path <public key file path> --policy-ids <comma separated trustauthority attestation policy ids>
 ```
-_NOTE: The response format is like `Trace Id: <TraceID>=<token>`. Please copy the token part as input of the next step._
+_NOTE: The first line of response `Trace Id` like `Trace Id: <TraceID>`. The token is from the second line to the end of the response. Please copy the token as input of the next step._
 
 - To verify Intel Trust Authority signed token. Use the token returned in the above command. 
 ```
@@ -331,6 +331,12 @@ Cloud native AI pipeline (CNAP) is a multiple-stream and real-time inference pip
 
 In this example, you can use below commands to run the CNAP workload in containers and check AMX acceleration effect.
 
+_NOTE: To get a better performance data, it's recommended to set cpu mode to performance on the host. Please refer to below command._
+
+- (Optional) Set CPU mode to performance on the host.
+```
+sudo cpupower frequency-set --governor performance
+```
 
 - Connect to the TD, run below commands.
 ```
@@ -339,7 +345,7 @@ root@tdx-guest:~# cd /root/example_cnap
 ```
 - Run CNAP workload. There will be 2 inference containers running, one for AMX-enabled and the other for AMX-disabled.
 ```
-root@tdx-guest:~# ./cnap_docker_setup.sh
+root@tdx-guest:~# ./run_cnap_docker.sh
 ```
 
 - Check inference FPS of AMX-enabled container.

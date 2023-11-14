@@ -3,3 +3,4 @@ artifacts/
 *.log
 scripts/guest-image/cloud-init-data/user-data
 scripts/guest-image/cloud-init-data/meta-data
+scripts/guest-image/cloud-init-data/user-data.yaml

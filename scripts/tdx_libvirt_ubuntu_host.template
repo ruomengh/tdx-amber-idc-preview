@@ -35,9 +35,8 @@
       <source file='/path/to/image'/>
       <target dev='vda' bus='virtio'/>
     </disk>
-    <interface type='bridge'>
-      <source bridge='virbr0'/>
-      <model type='virtio'/>
+    <interface type="user">
+      <model type="virtio"/>
     </interface>
     <console type='pty'>
       <target type='virtio' port='0'/>
@@ -57,4 +56,3 @@
     <qemu:arg value='host,-kvm-steal-time'/>
   </qemu:commandline>
 </domain>
-

@@ -12,13 +12,15 @@ GUEST_IMAGE_TOOL_DIR="${CURR_DIR}/guest-image"
 ARTIFACTS_DIR=$(realpath "${CURR_DIR}/../artifacts")
 UBUNTU_ISO_DIR="${ARTIFACTS_DIR}/ubuntu-iso"
 UBUNTU_ISO_FILENAME="jammy-server-cloudimg-amd64.img"
-RELEASE="2023ww33"
+RELEASE="2023ww45"
 OFFICIAL_UBUNTU_IMAGE="https://cloud-images.ubuntu.com/jammy/current/"
 GUEST_IMG="tdx-guest.qcow2"
 GUEST_HOSTNAME="tdx-guest"
 GUEST_USER="tdx"
 GUEST_PASSWORD=""
 SIZE=20
+AI_WORKLOAD=false
+FLAGS=""
 
 info() {
     echo -e "\e[1;33mINFO: $*\e[0;0m"
@@ -42,10 +44,11 @@ usage() {
 Usage: $(basename "$0") [OPTION]...
   -h                        Show this help
   -f                        Force to recreate the output image
-  -n                        Guest host name, default is "tdx-guest"
-  -u                        Guest user name, default is "tdx"
-  -p                        Guest password, must provide from command line
-  -s                        Specify the size of guest image
+  -a			    Install amx & cnap demo
+  -n <host name>            Guest host name, default is "tdx-guest"
+  -u <user name>            Guest user name, default is "tdx"
+  -p <user password>        Guest password, must provide from command line
+  -s <image size>           Specify the size of guest image
   -o <output file>          Specify the output file, default is td-guest.qcow2.
                             Please make sure the suffix is qcow2. Due to permission consideration,
                             the output file will be put into /tmp/<output file>.
@@ -53,7 +56,7 @@ EOM
 }
 
 process_args() {
-    while getopts "o:s:n:u:p:fh" option; do
+    while getopts "o:s:n:u:p:fha" option; do
         case "$option" in
         o) GUEST_IMG=$OPTARG ;;
         s) SIZE=$OPTARG ;;
@@ -61,6 +64,7 @@ process_args() {
         u) GUEST_USER=$OPTARG ;;
         p) GUEST_PASSWORD=$OPTARG ;;
         f) FORCE_RECREATE=true ;;
+	a) AI_WORKLOAD=true ;;
         h)
             usage
             exit 0
@@ -77,6 +81,7 @@ process_args() {
         if [[ ${FORCE_RECREATE} != "true" ]]; then
             error "Guest image ${GUEST_IMG} already exist, please specify -f if want force to recreate"
         fi
+	FLAGS+=" -f "
     fi
 
     if [[ ${GUEST_IMG} != *.qcow2 ]]; then
@@ -85,6 +90,15 @@ process_args() {
 
     if [[ -z ${GUEST_PASSWORD} ]]; then
         error "Please specify the guest password."
+    fi
+
+    if [[ ${AI_WORKLOAD} == "true"  ]]; then
+	FLAGS+=" -a "
+	if [[ $SIZE < 40 ]]; then
+		warn "When ai workload enabled, the size should >= 40G"
+		warn "Extend the image size to 40G"
+		SIZE=40
+	fi
     fi
 }
 
@@ -108,6 +122,9 @@ pre_check() {
     if [[ ! "$(command -v genisoimage)" ]]; then
         error "virt-customize is not installed, please run 'sudo apt install genisoimage'"
     fi
+    if [[ ! "$(command -v cloud-init)" ]]; then
+        error "cloud-init is not installed, please run 'sudo apt install cloud-init'"
+    fi
 }
 
 process_args "$@"
@@ -121,7 +138,7 @@ sudo ${GUEST_IMAGE_TOOL_DIR}/create-ubuntu-image.sh \
     -r "${ARTIFACTS_DIR}/${RELEASE}/mvp-tdx-stack-guest-ubuntu-22.04/jammy/" \
     -o ${GUEST_IMG} \
     -s ${SIZE} \
-    -f
+    $FLAGS
 
 cp /tmp/${GUEST_IMG} ${CURR_DIR}/
 ok "Copy /tmp/${GUEST_IMG} => ${CURR_DIR}/${GUEST_IMG}"

@@ -1,10 +1,5 @@
 #!/bin/bash
 #
-# Copyright (c) 2023, Intel Corporation. All rights reserved.<BR>
-# SPDX-License-Identifier: Apache-2.0
-#
-
-#
 # Launch QEMU-KVM to create Guest VM in following types:
 # - Legacy VM: non-TDX VM boot with legacy(non-EFI) SEABIOS
 # - EFI VM: non-TDX VM boot with EFI BIOS OVMF(Open Virtual Machine Firmware)
@@ -41,17 +36,17 @@ fi
 
 # VM configurations
 CPUS=1
-MEM=2G
+MEM=4G
 SGX_EPC_SIZE=64M
 
 # Installed from the package of intel-mvp-tdx-tdvf
 OVMF="/usr/share/qemu/OVMF.fd"
 GUEST_IMG=""
-DEFAULT_GUEST_IMG="${CURR_DIR}/tdx-guest.qcow2"
+DEFAULT_GUEST_IMG="${CURR_DIR}/td-guest.qcow2"
 KERNEL=""
 DEFAULT_KERNEL="${CURR_DIR}/vmlinuz"
 VM_TYPE="td"
-BOOT_TYPE="grub"
+BOOT_TYPE="direct"
 DEBUG=false
 USE_VSOCK=false
 USE_SERIAL_CONSOLE=false
@@ -61,9 +56,10 @@ ROOT_PARTITION="/dev/vda1"
 KERNEL_CMD_NON_TD="root=${ROOT_PARTITION} rw console=hvc0"
 KERNEL_CMD_TD="${KERNEL_CMD_NON_TD}"
 MAC_ADDR=""
-QUOTE_TYPE="tdvmcall"
+QUOTE_TYPE=""
 NET_CIDR="10.0.2.0/24"
 DHCP_START="10.0.2.15"
+HUGEPAGE_PATH=""
 
 # Just log message of serial into file without input
 HVC_CONSOLE="-chardev stdio,id=mux,mux=on,logfile=$CURR_DIR/vm_log_$(date +"%FT%H%M").log \
@@ -103,6 +99,7 @@ Usage: $(basename "$0") [OPTION]...
   -a <DHCP start>           Network started address, default is "10.0.2.15"
   -e <extra kernel cmd>     Extra kernel command needed in VM boot
   -w <sha384 hex string>    pass customiszed 48*2 bytes MROWNERCONFIG to the vm, only support td
+  -u <hugepage mount path>  mount path of hugepages
   -v                        Flag to enable vsock
   -d                        Flag to enable "debug=on" for GDB guest
   -s                        Flag to use serial console instead of HVC console
@@ -120,7 +117,7 @@ warn() {
 }
 
 process_args() {
-    while getopts ":i:k:t:b:p:f:o:a:m:vdshq:c:r:n:s:e:w:" option; do
+    while getopts ":i:k:t:b:p:f:o:a:m:vdshq:c:r:n:s:e:w:u:" option; do
         case "$option" in
             i) GUEST_IMG=$OPTARG;;
             k) KERNEL=$OPTARG;;
@@ -140,6 +137,7 @@ process_args() {
             a) DHCP_START=$OPTARG;;
             w) MROWNERCONFIG=$OPTARG;;
             e) EXTRA_KERNEL_CMD=$OPTARG;;
+            u) HUGEPAGE_PATH=$OPTARG;;
             h) usage
                exit 0
                ;;
@@ -171,8 +169,6 @@ process_args() {
         if [[ ! -f /usr/share/qemu/OVMF.fd ]]; then
             error "Could not find /usr/share/qemu/OVMF.fd. Please install TDVF(Trusted Domain Virtual Firmware)."
         fi
-        echo "Create ${OVMF} from template /usr/share/qemu/OVMF.fd"
-        cp /usr/share/qemu/OVMF.fd "${OVMF}"
     fi
 
     # Check parameter MAC address
@@ -182,11 +178,15 @@ process_args() {
         fi
     fi
 
-    case ${GUEST_IMG##*.} in
-        qcow2) FORMAT="qcow2";;
-          img) FORMAT="raw";;
-            *) echo "Unknown disk image's format"; exit 1 ;;
-    esac
+    file_format=$(file "${GUEST_IMG}")
+    if [[ "$file_format" == *"QCOW"* ]]; then
+        FORMAT="qcow2"
+    elif [[ "$file_format" == *": data"* ]]; then
+        FORMAT="raw"
+    else
+        echo "Unknown disk image's format: ${file_format}"
+        exit 1
+    fi
 
     # Guest rootfs changes
     if [[ ${ROOT_PARTITION} != "/dev/vda1" ]]; then
@@ -223,9 +223,9 @@ process_args() {
                 PARAM_CPU+=",tsc-freq=1000000000"
             fi
             # Note: "pic=no" could only be used in TD mode but not for non-TD mode
-            PARAM_MACHINE+=",kernel_irqchip=split,confidential-guest-support=tdx"
+            PARAM_MACHINE+=",kernel_irqchip=split,confidential-guest-support=tdx,memory-backend=ram1"
             QEMU_CMD+=" -bios ${OVMF}"
-            QEMU_CMD+=" -object tdx-guest,sept-ve-disable,id=tdx"
+            QEMU_CMD+=" -object tdx-guest,sept-ve-disable=on,id=tdx"
             if [[ ${QUOTE_TYPE} == "tdvmcall" ]]; then
                 QEMU_CMD+=",quote-generation-service=vsock:2:4050"
             fi
@@ -234,6 +234,13 @@ process_args() {
             fi
             if [[ ${DEBUG} == true ]]; then
                 QEMU_CMD+=",debug=on"
+            fi
+            # When user specify a hugepage path, it will set hugetlb=on and use the user-defined path.
+            if [[ ${HUGEPAGE_PATH} == "" ]]; then
+                QEMU_CMD+=" -object memory-backend-memfd-private,id=ram1,size=${MEM}"
+            else
+                QEMU_CMD+=" -object memory-backend-memfd,id=ramhuge,size=${MEM},hugetlb=on,hugetlbsize=2M"
+                QEMU_CMD+=" -object memory-backend-memfd-private,id=ram1,size=${MEM},path=${HUGEPAGE_PATH},shmemdev=ramhuge"
             fi
             ;;
         "efi")

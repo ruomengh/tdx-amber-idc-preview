@@ -36,6 +36,7 @@
       <target dev='vda' bus='virtio'/>
     </disk>
     <interface type="bridge">
+      <source bridge='virbr0'/>
       <model type="virtio"/>
     </interface>
     <console type='pty'>

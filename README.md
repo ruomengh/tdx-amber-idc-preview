@@ -183,12 +183,12 @@ Example
 
 After creating the guest image, use the following command to create a TD.
 ```
-./start-virt.sh -i <image file name> -n <guest vm name> -c <vCPU number> -m <memory size in GB>
+./start-virt.sh -i <image file name> -n <guest vm name> -v <vCPU number> -m <memory size in GB>
 
 ```
 For example:
 ```
-./start-virt.sh -i tdx-guest.qcow2 -n my-guest -c 4 -m 16
+./start-virt.sh -i tdx-guest.qcow2 -n my-guest -v 4 -m 16
 ```
 
 
